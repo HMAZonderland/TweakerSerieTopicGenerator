@@ -178,33 +178,18 @@ class TVDbShow
             $this->status           = (string)$data->Status;
             $this->last_updated     = (string)$data->lastupdated;
 
-            // Mapje aanmaken, even zien of mapje bestaat
-            /*$folder = 'media/' . trim($this->name);
-            if (!is_dir($folder)) {
-                // mapje maken
-                mkdir($folder);
-            }*/
-
-            // Functie om het plaatje op te halen
+            // Plaatje maken en cachen
             if (isset($data->banner) && strlen($data->banner)) {
-                $fullUrl = 'http://thetvdb.com/banners/' . $data->banner;
-
                 if (!file_exists($data->banner)) {
-                    $ch = curl_init($fullUrl);
-                    $fp = fopen($data->banner, 'wb');
-                    curl_setopt($ch, CURLOPT_FILE, $fp);
-                    curl_setopt($ch, CURLOPT_HEADER, 0);
-                    curl_exec($ch);
-                    curl_close($ch);
-                    fclose($fp);
+                    $img = new SimpleImage();
+                    $img->load('http://thetvdb.com/banners/' . $data->banner)->fit_to_width(600)->save($data->banner, 80);
                 }
-
                 $this->banner = 'http://ultimation.nl/tweakers/' . $data->banner;
             }
         }
     }
 
-    // Setter to create images.
+    //Plaatjes maken
     public function setActors($actors) {
         if (isset($actors) && sizeof($actors) > 0) {
             foreach ($actors as $actor) {
