@@ -21,11 +21,6 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
     $tweakers = new TweakersUBB();
     $ubb = "";
 
-    /*echo "<pre>";
-    print_r($show->actors);
-    echo "</pre>";
-    die();*/
-
     if (isset($show->name) && !empty($show->name)) {
 
         $genres;

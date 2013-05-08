@@ -321,12 +321,6 @@ class TVDb
 			$result = simplexml_load_string($zip->getFromName('en.xml'));
             $actors = simplexml_load_string($zip->getFromName('actors.xml'));
 
-            /*echo "get_tv_show_by_id Result <pre>";
-            print_r($result);
-            print_r($actors);
-            echo "</pre>";
-            die();*/
-
 			$zip->close();
 			unlink($tmp);
 		} else {

@@ -7,7 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class TweakersUBB {
+class TweakersUBB
+{
 
     /**
      * Contains the table border color (outside border of the table)
@@ -39,7 +40,8 @@ class TweakersUBB {
      * @param string $tableBgColor
      * @param string $tdBgColor
      */
-    function __construct($tableBorderColor = "000", $tableBgColor = "000", $tdBgColor = "FFF", $thBgColor = "000") {
+    function __construct($tableBorderColor = "000", $tableBgColor = "000", $tdBgColor = "FFF", $thBgColor = "000")
+    {
         $this->tableBorderColor = $tableBorderColor;
         $this->tableBgColor = $tableBgColor;
         $this->tdBgColor = $tdBgColor;
@@ -51,7 +53,8 @@ class TweakersUBB {
      * @param $ubbTable
      * @return string
      */
-    private function getTable($ubbTable) {
+    private function getTable($ubbTable)
+    {
         return "[table border=1 width=600 cellpadding=2 bordercolor=#" . $this->tableBorderColor . " bgcolor=#" . $this->tableBgColor . "]" . $ubbTable . "[/table]";
     }
 
@@ -62,9 +65,10 @@ class TweakersUBB {
      * @param $plot
      * @return string
      */
-    public function getSerieHeader($bannerUrl, $title, $plot){
+    public function getSerieHeader($bannerUrl, $title, $plot)
+    {
 
-        $str  = "[tr]";
+        $str = "[tr]";
         $str .= "[td bgcolor=#" . $this->tdBgColor . "][img title=" . $title . "]" . $bannerUrl . "[/img][/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
@@ -86,30 +90,30 @@ class TweakersUBB {
      * @param $status
      * @return string
      */
-    public function getSerieData($genre, $first_aired, $network, $rating, $status) {
-
-        $str  = "[tr]";
+    public function getSerieData($genre, $first_aired, $network, $rating, $status)
+    {
+        $str = "[tr]";
         $str .= "[th colspan=2 bgcolor=#" . $this->thBgColor . "]Algemene informatie[/th]";
         $str .= "[/tr]";
         $str .= "[tr]";
         $str .= "[td bgcolor=#" . $this->tdBgColor . "]Zender/Uitgever[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $network .  "[/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $network . "[/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
         $str .= "[td bgcolor=#" . $this->tdBgColor . "]Genre[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $genre .  "[/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $genre . "[/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
         $str .= "[td bgcolor=#" . $this->tdBgColor . "]Eerste uitzending[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $first_aired .  "[/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $first_aired . "[/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
         $str .= "[td bgcolor=#" . $this->tdBgColor . "]Cijfer[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $rating .  "[/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $rating . "[/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
         $str .= "[td bgcolor=#" . $this->tdBgColor . "]Status[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $status .  "[/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $status . "[/td]";
         $str .= "[/tr]";
 
         return $this->getTable($str);
@@ -119,9 +123,10 @@ class TweakersUBB {
      * Rerturns a table containing all the actors
      * @param array $actors
      */
-    public function getActorTable(SimpleXMLElement $actors) {
+    public function getActorTable(SimpleXMLElement $actors)
+    {
 
-        $str  = "[tr]";
+        $str = "[tr]";
         $str .= "[th colspan=2 bgcolor=#" . $this->thBgColor . "]Acteurs[/th]";
         $str .= "[/tr]";
 
@@ -133,5 +138,10 @@ class TweakersUBB {
         }
 
         return $this->getTable($str);
+    }
+
+    public function getLinksTable()
+    {
+
     }
 }
