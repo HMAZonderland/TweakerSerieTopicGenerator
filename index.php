@@ -1,5 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/TVDb-API-Class/TVDb.php';
+require_once dirname(__FILE__) . '/TVDb-API-Class/TvDbShow.php';
+require_once dirname(__FILE__) . '/TVDb-API-Class/TvDbEpisode.php';
 
 if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
 

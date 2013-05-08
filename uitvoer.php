@@ -1,5 +1,8 @@
 <?php
 require_once dirname(__FILE__) . '/TVDb-API-Class/TVDb.php';
+require_once dirname(__FILE__) . '/TVDb-API-Class/TvDbShow.php';
+require_once dirname(__FILE__) . '/TVDb-API-Class/TvDbEpisode.php';
+require_once dirname(__FILE__) . '/SimpleImage/SimpleImage.class.php';
 require_once dirname(__FILE__) . '/Tweakers/TweakersUBB.php';
 
 /**
@@ -18,6 +21,11 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
     $tweakers = new TweakersUBB();
     $ubb = "";
 
+    /*echo "<pre>";
+    print_r($show->actors);
+    echo "</pre>";
+    die();*/
+
     if (isset($show->name) && !empty($show->name)) {
 
         $genres;
@@ -30,6 +38,8 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
        echo $tweakers->getSerieHeader($show->banner, $show->name, $show->overview);
        echo "<br />";
        echo $tweakers->getSerieData($genres, $show->first_aired, $show->network, $show->rating, $show->status);
+       echo "<br />";
+       echo $tweakers->getActorTable($show->actors);
 
     } else {
         echo 'Invalide tvDbId. Geen serie gevonden.';

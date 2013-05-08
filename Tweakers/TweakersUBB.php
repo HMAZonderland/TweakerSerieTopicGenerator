@@ -65,7 +65,7 @@ class TweakersUBB {
     public function getSerieHeader($bannerUrl, $title, $plot){
 
         $str  = "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "][img]" . $bannerUrl . "[/img][/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "][img title=" . $title . "]" . $bannerUrl . "[/img][/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
         $str .= "[th bgcolor=#" . $this->thBgColor . "]" . $title . "[/th]";
@@ -119,15 +119,16 @@ class TweakersUBB {
      * Rerturns a table containing all the actors
      * @param array $actors
      */
-    public function getActorTable(array $actors) {
+    public function getActorTable(SimpleXMLElement $actors) {
 
         $str  = "[tr]";
-        $str .= "[th bgcolor=#" . $this->thBgColor . "]Acteurs[/th]";
+        $str .= "[th colspan=2 bgcolor=#" . $this->thBgColor . "]Acteurs[/th]";
         $str .= "[/tr]";
 
         foreach ($actors as $actor) {
-            $str  = "[tr]";
-            $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $actor . "[/th]";
+            $str .= "[tr]";
+            $str .= "[td bgcolor=#" . $this->tdBgColor . " width=1][img title=" . $actor->Role . "]" . $actor->Image . "[/img][/td]";
+            $str .= "[td bgcolor=#" . $this->tdBgColor . " valign=top]" . $actor->Role . " gespeeld door " . $actor->Name . "[/td]";
             $str .= "[/tr]";
         }
 
