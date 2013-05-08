@@ -1,9 +1,9 @@
 <?php
-require_once dirname(__FILE__) . '/TVDb-API-Class/TVDb.php';
-require_once dirname(__FILE__) . '/TVDb-API-Class/TvDbShow.php';
-require_once dirname(__FILE__) . '/TVDb-API-Class/TvDbEpisode.php';
-require_once dirname(__FILE__) . '/SimpleImage/SimpleImage.class.php';
-require_once dirname(__FILE__) . '/Tweakers/TweakersUBB.php';
+require_once dirname(__FILE__) . '/TvDbApiLib/TVDb.php';
+require_once dirname(__FILE__) . '/TvDbApiLib/TvDbShow.php';
+require_once dirname(__FILE__) . '/TvDbApiLib/TvDbEpisode.php';
+require_once dirname(__FILE__) . '/SimpleImageLib/SimpleImage.class.php';
+require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
 
 /**
  * Created by JetBrains PhpStorm.
