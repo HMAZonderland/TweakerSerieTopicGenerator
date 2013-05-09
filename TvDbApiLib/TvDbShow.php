@@ -182,7 +182,7 @@ class TVDbShow
             if (isset($data->banner) && strlen($data->banner)) {
                 if (!file_exists($data->banner)) {
                     $img = new SimpleImage();
-                    $img->load('http://thetvdb.com/banners/' . $data->banner)->fit_to_width(600)->save($data->banner, 80);
+                    $img->load('http://thetvdb.com/banners/' . $data->banner)->fit_to_width(640)->save($data->banner, 80);
                 }
                 $this->banner = 'http://ultimation.nl/tweakers/' . $data->banner;
             }

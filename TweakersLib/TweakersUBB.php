@@ -55,7 +55,7 @@ class TweakersUBB
      */
     private function getTable($ubbTable)
     {
-        return "[table border=1 width=600 cellpadding=2 bordercolor=#" . $this->tableBorderColor . " bgcolor=#" . $this->tableBgColor . "]" . $ubbTable . "[/table]";
+        return "[table border=1 width=640 cellpadding=2 bordercolor=#" . $this->tableBorderColor . " bgcolor=#" . $this->tableBgColor . "]" . $ubbTable . "[/table]";
     }
 
     /**
@@ -69,7 +69,7 @@ class TweakersUBB
     {
 
         $str = "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "][img title=" . $title . "]" . $bannerUrl . "[/img][/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "][img title='" . $title . "']" . $bannerUrl . "[/img][/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
         $str .= "[th bgcolor=#" . $this->thBgColor . "]" . $title . "[/th]";
@@ -132,16 +132,11 @@ class TweakersUBB
 
         foreach ($actors as $actor) {
             $str .= "[tr]";
-            $str .= "[td bgcolor=#" . $this->tdBgColor . " width=1][img title=" . $actor->Role . "]" . $actor->Image . "[/img][/td]";
+            $str .= "[td bgcolor=#" . $this->tdBgColor . " width=1][img title='" . $actor->Role . "']" . $actor->Image . "[/img][/td]";
             $str .= "[td bgcolor=#" . $this->tdBgColor . " valign=top]" . $actor->Role . " gespeeld door " . $actor->Name . "[/td]";
             $str .= "[/tr]";
         }
 
         return $this->getTable($str);
-    }
-
-    public function getLinksTable()
-    {
-
     }
 }
