@@ -10,43 +10,28 @@ error_reporting(-1);
 
 require_once dirname(__FILE__) . '/tools/C_URL.tool.php';
 require_once dirname(__FILE__) . '/tools/SimpleXML.tool.php';
+
 require_once dirname(__FILE__) . '/TvDbApiLib/TVDb.php';
 require_once dirname(__FILE__) . '/TvDbApiLib/TvDbShow.php';
 require_once dirname(__FILE__) . '/TvDbApiLib/TvDbEpisode.php';
 require_once dirname(__FILE__) . '/SimpleImageLib/SimpleImage.class.php';
-require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
 require_once dirname(__FILE__) . '/IMDbApiLib/IMDb.php';
+require_once dirname(__FILE__) . '/IMDbApiLib/IMDbShow.php';
+require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
+require_once dirname(__FILE__) . '/TweakersLib/TweakersSerie.php';
 
 if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
-    $tvdbApi = new TVDb();
-    $tvdb = $tvdbApi->get_tv_show_by_id($_GET['tvDbId']);
-
+    $serie = TweakersSerie::getSerieByTvDbId($_GET['tvDbId']);
     $tweakers = new TweakersUBB();
-    $ubb = "";
 
-    $imdb = new IMDbApi();
-    $imdb->getSerieById($show->IMDB_id);
+    if (strlen($serie->getName()) > 0) {
 
-    if (isset($tvdb->name) && !empty($tvdb->name)) {
-
-        $genres = null;
-        foreach ($tvdb->genre as $genre) {
-            $genres .= $genre . ",";
-        }
-
-        $plot = $show->overview;
-        if (strlen($imdb->getSeriePlot()) > strlen($plot)) {
-            $plot = $imdb->getSeriePlot();
-        }
-
-        $genres = substr($genres, 0, strlen($genres) - 1);
-
-       echo $tweakers->getSerieHeader($tvdb->banner, $tvdb->name, $plot);
+       echo $tweakers->getSerieHeader($serie->getBanner(), $serie->getName(), $serie->getLongestPlot());
        echo "<br />";
-       echo $tweakers->getSerieData($genres, $tvdb->first_aired, $tvdb->network, $tvdb->rating, $tvdb->status);
+       echo $tweakers->getSerieData($serie->getGenresAsString(), $serie->getFirstAirDate(), $serie->getNetwork(), $serie->getRatings(), $serie->getStatus());
        echo "<br />";
-       echo $tweakers->getActorTable($show->actors);
+       echo $tweakers->getActorTable($serie->getActors());
 
     } else {
         echo 'Invalide tvDbId. Geen serie gevonden.';
