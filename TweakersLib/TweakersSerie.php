@@ -146,12 +146,13 @@ class TweakersSerie
      */
     public function getGenresAsString()
     {
-        $s = '';
+        $str = '';
         $genres = $this->getGenres();
-        foreach ($genres as $genre) {
-            $s += $genre . ', ';
+        foreach ($genres as $key => $genre) {
+            $str = $str . $genre . ", ";
         }
-        return substr($s, 0, strlen($s) - 1);
+
+        return substr($str, 0, strlen($str) - 2);
     }
 
     /**
