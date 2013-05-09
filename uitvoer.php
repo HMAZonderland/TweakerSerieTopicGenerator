@@ -44,7 +44,7 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
        echo $tweakers->getSerieHeader($tvdb->banner, $tvdb->name, $plot);
        echo "<br />";
-       echo $tweakers->getSerieData($genres, $tvdb->first_aired, $tvdb->network, $tvdb->rating, $imdb->getRating() $tvdb->status);
+       echo $tweakers->getSerieData($genres, $tvdb->first_aired, $tvdb->network, $tvdb->rating, $tvdb->status);
        echo "<br />";
        echo $tweakers->getActorTable($show->actors);
 

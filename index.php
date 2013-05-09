@@ -1,7 +1,14 @@
 <?php
+ob_start();
+
+require_once dirname(__FILE__) . '/tools/C_URL.tool.php';
+require_once dirname(__FILE__) . '/tools/SimpleXML.tool.php';
 require_once dirname(__FILE__) . '/TvDbApiLib/TVDb.php';
 require_once dirname(__FILE__) . '/TvDbApiLib/TvDbShow.php';
 require_once dirname(__FILE__) . '/TvDbApiLib/TvDbEpisode.php';
+require_once dirname(__FILE__) . '/SimpleImageLib/SimpleImage.class.php';
+require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
+require_once dirname(__FILE__) . '/IMDbApiLib/IMDb.php';
 
 if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
 
