@@ -162,7 +162,7 @@ class IMDbShow {
             $this->rating                   =       $data->rating;
             $this->rating_count             =       $data->rating_count;
             $this->year                     =       $data->year;
-            $this->genres                   =       $data->genres;
+            $this->genres                   =       (array) $data->genres->item;
             $this->rated                    =       $data->rated;
             $this->episodes                 =       $data->episodes;
             $this->actors                   =       $data->actors;
