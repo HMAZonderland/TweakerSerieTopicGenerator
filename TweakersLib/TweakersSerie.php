@@ -162,13 +162,13 @@ class TweakersSerie
     {
         $ratings = array();
 
-        $ratings['IMDb'] = array();
-        $ratings['IMDb']['cijfer'] = $this->_imdb->rating;
-        $ratings['IMDb']['stemmen'] = $this->_imdb->rating_count;
+        $ratings['[b]IMDb[/b]'] = array();
+        $ratings['[b]IMDb[/b]']['cijfer'] = $this->_imdb->rating;
+        $ratings['[b]IMDb[/b]']['(stemmen'] = $this->_imdb->rating_count . ')';
 
-        $ratings['TvDb'] = array();
-        $ratings['TvDb']['cijfer'] = $this->_tvdb->rating;
-        $ratings['TvDb']['stemmen'] = $this->_tvdb->rating_count;
+        $ratings['[b]TvDb[/b]'] = array();
+        $ratings['[b]TvDb[/b]']['cijfer'] = $this->_tvdb->rating;
+        $ratings['[b]TvDb[/b]']['(stemmen'] = $this->_tvdb->rating_count . ')';
 
         return $ratings;
     }
