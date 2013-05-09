@@ -90,7 +90,7 @@ class TweakersUBB
      * @param $status
      * @return string
      */
-    public function getSerieData($genre, $first_aired, $network, $rating, $status)
+    public function getSerieData($genre, $first_aired, $network, $ratings, $status)
     {
         $str = "[tr]";
         $str .= "[th colspan=2 bgcolor=#" . $this->thBgColor . "]Algemene informatie[/th]";
@@ -108,8 +108,18 @@ class TweakersUBB
         $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $first_aired . "[/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]Cijfer[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $rating . "[/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "]Cijfers[/td]";
+        $str .= "[td bgcolor=#" . $this->tdBgColor . "]";
+
+        foreach ($ratings as $key => $data) {
+            $str .= $key . ": ";
+            foreach ($data as $key => $val) {
+                $str .= " " . $key . ": " . $val;
+            }
+            $str .= "<br />";
+        }
+
+        $str .= "[/td]";
         $str .= "[/tr]";
         $str .= "[tr]";
         $str .= "[td bgcolor=#" . $this->tdBgColor . "]Status[/td]";
