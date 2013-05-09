@@ -1,10 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/TvDbApiLib/TVDb.php';
-require_once dirname(__FILE__) . '/TvDbApiLib/TvDbShow.php';
-require_once dirname(__FILE__) . '/TvDbApiLib/TvDbEpisode.php';
-require_once dirname(__FILE__) . '/SimpleImageLib/SimpleImage.class.php';
-require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
-
 /**
  * Created by JetBrains PhpStorm.
  * User: hugozonderland
@@ -12,27 +6,45 @@ require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
  * Time: 10:55
  * To change this template use File | Settings | File Templates.
  */
+error_reporting(-1);
+
+require_once dirname(__FILE__) . '/tools/C_URL.tool.php';
+require_once dirname(__FILE__) . '/tools/SimpleXML.tool.php';
+require_once dirname(__FILE__) . '/TvDbApiLib/TVDb.php';
+require_once dirname(__FILE__) . '/TvDbApiLib/TvDbShow.php';
+require_once dirname(__FILE__) . '/TvDbApiLib/TvDbEpisode.php';
+require_once dirname(__FILE__) . '/SimpleImageLib/SimpleImage.class.php';
+require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
+require_once dirname(__FILE__) . '/IMDbApiLib/IMDb.php';
 
 if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
-    $tvdb = new TVDb();
-    $show = $tvdb->get_tv_show_by_id($_GET['tvDbId']);
+    $tvdbApi = new TVDb();
+    $tvdb = $tvdbApi->get_tv_show_by_id($_GET['tvDbId']);
 
     $tweakers = new TweakersUBB();
     $ubb = "";
 
-    if (isset($show->name) && !empty($show->name)) {
+    $imdb = new IMDbApi();
+    $imdb->getSerieById($show->IMDB_id);
 
-        $genres;
-        foreach ($show->genre as $genre) {
+    if (isset($tvdb->name) && !empty($tvdb->name)) {
+
+        $genres = null;
+        foreach ($tvdb->genre as $genre) {
             $genres .= $genre . ",";
+        }
+
+        $plot = $show->overview;
+        if (strlen($imdb->getSeriePlot()) > strlen($plot)) {
+            $plot = $imdb->getSeriePlot();
         }
 
         $genres = substr($genres, 0, strlen($genres) - 1);
 
-       echo $tweakers->getSerieHeader($show->banner, $show->name, $show->overview);
+       echo $tweakers->getSerieHeader($tvdb->banner, $tvdb->name, $plot);
        echo "<br />";
-       echo $tweakers->getSerieData($genres, $show->first_aired, $show->network, $show->rating, $show->status);
+       echo $tweakers->getSerieData($genres, $tvdb->first_aired, $tvdb->network, $tvdb->rating, $imdb->getRating() $tvdb->status);
        echo "<br />";
        echo $tweakers->getActorTable($show->actors);
 

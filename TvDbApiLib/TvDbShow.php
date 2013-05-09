@@ -189,7 +189,7 @@ class TVDbShow
         }
     }
 
-    //Plaatjes maken
+    //Plaatje maken
     public function setActors($actors) {
         if (isset($actors) && sizeof($actors) > 0) {
             foreach ($actors as $actor) {
