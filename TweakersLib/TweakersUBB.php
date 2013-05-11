@@ -158,9 +158,10 @@ class TweakersUBB
      */
     public function getSerieHeader($bannerUrl, $title, $plot)
     {
-        $str = $this->getTdRow(array(self::createDataArray("[img title='" . $title . "']" . $bannerUrl . "[/img]")));
+        $str = '';
+        if (strlen($bannerUrl) > 0) $str .= $this->getTdRow(array(self::createDataArray("[img title='" . $title . "']" . $bannerUrl . "[/img]")));
         $str .= $this->getThRow(self::createDataArray($title));
-        $str .= $this->getTdRow(array(self::createDataArray($plot)));
+        if (strlen($plot) > 0) $str .= $this->getTdRow(array(self::createDataArray($plot)));
 
         return $this->getTable($str);
     }
@@ -198,7 +199,7 @@ class TweakersUBB
                 $cells = array($left, $right);
                 $str .= $this->getTdRow($cells);
             }  else {
-                $str .= $this->getTdRow(array(self::createDataArray($actor->Role . " gespeeld door " . $actor->Name)));
+                $str .= $this->getTdRow(array(self::createDataArray($actor->Role, array("colspan" => 2))));
             }
         }
         return $this->getTable($str);
