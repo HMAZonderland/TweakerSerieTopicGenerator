@@ -213,6 +213,7 @@ class TVDbShow
                     }
                     $actor->Image = 'http://ultimation.nl/tweakers/' . $actor->Image;
                 }
+                addslashes($actor->Name);
             }
         }
         $this->actors = $actors;
