@@ -198,8 +198,14 @@ class TweakersUBB
                 $right = self::createDataArray($actor->Role . " gespeeld door " . $actor->Name, array("valign" => "top"));
                 $cells = array($left, $right);
                 $str .= $this->getTdRow($cells);
-            }  else {
+            }  elseif (strlen($actor->Role) >! 0) {
+                $str .= $this->getTdRow(array(self::createDataArray($actor->Name, array("colspan" => 2))));
+            } elseif (strlen($actor->Name) >! 0) {
                 $str .= $this->getTdRow(array(self::createDataArray($actor->Role, array("colspan" => 2))));
+            } elseif ((strlen($actor->Name) >! 0 && strlen($actor->Role) >! 0) || strlen($actor->Image) > 0) {
+                $str .= $this->getTdRow(array(self::createDataArray("[img]" . $actor->Image . "[/img]", array("colspan" => 2))));
+            } else if (strlen($actor->Name) > 0 && strlen($actor->Role) > 0) {
+                $str .= self::createDataArray($actor->Role . " gespeeld door " . $actor->Name, array("colspan" => 2));
             }
         }
         return $this->getTable($str);
