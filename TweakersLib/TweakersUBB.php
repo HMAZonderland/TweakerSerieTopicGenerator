@@ -36,6 +36,7 @@ class TweakersUBB
 
     /**
      * Construct
+     *
      * @param string $tableBorderColor
      * @param string $tableBgColor
      * @param string $tdBgColor
@@ -50,7 +51,9 @@ class TweakersUBB
 
     /**
      * Returns a table wraper
+     *
      * @param $ubbTable
+     *
      * @return string
      */
     private function getTable($ubbTable)
@@ -59,7 +62,10 @@ class TweakersUBB
     }
 
     /**
+     * Creates a td cell
+     *
      * @param $cell
+     *
      * @return string
      */
     private function getTd($cell)
@@ -75,14 +81,20 @@ class TweakersUBB
     }
 
     /**
+     * Creates a table cell
+     * $var[]['data'] contains the inner part of the cell.
+     * $var[]['other'] contains all the posible attributes
+     *
+     * To enable multiple cells create an array containing the cells
      *
      * @param array $cells
-     * @param int $colspan
+     * @param int   $colspan
+     *
      * @return string
      */
     private function getTdRow(array $cells)
     {
-        $str  = "[tr]";
+        $str = "[tr]";
         foreach ($cells as $cell) {
             $str .= $this->getTd($cell);
         }
@@ -91,13 +103,18 @@ class TweakersUBB
     }
 
     /**
-     * @param $cell
+     * Creates a table header
+     * $var['data'] contains the inner part of the cell.
+     * $var['other'] contains all the posible attributes
+     *
+     * @param     $cell
      * @param int $colspan
+     *
      * @return string
      */
     private function getThRow(array $cell)
     {
-        $str  = "[tr]";
+        $str = "[tr]";
         $str .= "[th bgcolor=#" . $this->thBgColor . " ";
         foreach ($cell as $property => $value) {
             if ($property != 'data') {
@@ -109,8 +126,13 @@ class TweakersUBB
     }
 
     /**
-     * @param $data
+     * Creates a TD array object.
+     * $var['data'] contains the inner part of the cell.
+     * $var['other'] contains all the posible attributes
+     *
+     * @param       $data
      * @param array $attributes
+     *
      * @return array
      */
     private static function createDataArray($data, array $attributes = null)
@@ -127,9 +149,11 @@ class TweakersUBB
 
     /**
      * Creates a serie topic header containing a banner
+     *
      * @param $bannerUrl
      * @param $title
      * @param $plot
+     *
      * @return string
      */
     public function getSerieHeader($bannerUrl, $title, $plot)
@@ -143,16 +167,18 @@ class TweakersUBB
 
     /**
      * Processes all sorts of general information
+     *
      * @param $genre
      * @param $first_aired
      * @param $network
      * @param $rating
      * @param $status
+     *
      * @return string
      */
     public function getSerieData($genre, $first_aired, $network, $ratings, $status)
     {
-        $str  = $this->getThRow(self::createDataArray("Algemene informatie", array("colspan" => 2)));
+        $str = $this->getThRow(self::createDataArray("Algemene informatie", array("colspan" => 2)));
         $str .= $this->getTdRow(array(self::createDataArray("Zender/Uitgever"), self::createDataArray($network)));
         $str .= $this->getTdRow(array(self::createDataArray("Genre"), self::createDataArray($genre)));
         $str .= $this->getTdRow(array(self::createDataArray("Eerste uitzending"), self::createDataArray($first_aired)));
@@ -174,7 +200,8 @@ class TweakersUBB
     }
 
     /**
-     * Rerturns a table containing all the actors
+     * Returns a table containing all the actors
+     *
      * @param array $actors
      */
     public function getActorTable(SimpleXMLElement $actors)
@@ -186,6 +213,22 @@ class TweakersUBB
             $cells = array($left, $right);
             $str .= $this->getTdRow($cells);
         }
+        return $this->getTable($str);
+    }
+
+    /**
+     * Creates a table containing links to all sorts of resources related to the serie
+     *
+     * @param $imdb
+     * @param $tvdb
+     *
+     * @return string
+     */
+    public function getLinksTable($tvdbUrl, $imdbUrl)
+    {
+        $str  = $this->getThRow(self::createDataArray("Links", array("colspan" => 2)));
+        $str .= $this->getTdRow(array(self::createDataArray("IMDb"), self::createDataArray($tvdbUrl)));
+        $str .= $this->getTdRow(array(self::createDataArray("TvDb"), self::createDataArray($imdbUrl)));
         return $this->getTable($str);
     }
 }

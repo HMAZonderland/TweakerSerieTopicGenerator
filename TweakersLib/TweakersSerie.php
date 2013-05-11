@@ -23,17 +23,21 @@ class TweakersSerie
 
     /**
      * Sets up the object
+     *
      * @param TvDbShow $tvdb
      * @param IMDbShow $imdb
      */
-    public function __construct(TvDbShow $tvdb, IMDbShow $imdb) {
+    public function __construct(TvDbShow $tvdb, IMDbShow $imdb)
+    {
         $this->_tvdb = $tvdb;
         $this->_imdb = $imdb;
     }
 
     /**
      * Searches by tvdbId, creates IMDbShow and TvDbShow objects uses both to create a TweakersSerie object
+     *
      * @param $tvdbId
+     *
      * @return TweakersSerie
      */
     public static function getSerieByTvDbId($tvdbId)
@@ -174,5 +178,22 @@ class TweakersSerie
         return $ratings;
     }
 
+    /**
+     * Returns the link to the TVDb
+     * @return string
+     */
+    public function getTvDbUrl()
+    {
+        return $this->_tvdb->tvdb_url;
+    }
+
+    /**
+     * Returns the link to IMDb
+     * @return SimpleXMLElement[]
+     */
+    public function getIMDbUrl()
+    {
+        return $this->_imdb->imdb_url;
+    }
 
 }

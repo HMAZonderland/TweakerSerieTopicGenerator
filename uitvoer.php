@@ -28,10 +28,12 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
     if (strlen($serie->getName()) > 0) {
 
        echo $tweakers->getSerieHeader($serie->getBanner(), $serie->getName(), $serie->getLongestPlot());
-       echo "<br />";
+       echo "<br /><br />";
        echo $tweakers->getSerieData($serie->getGenresAsString(), $serie->getFirstAirDate(), $serie->getNetwork(), $serie->getRatings(), $serie->getStatus());
-       echo "<br />";
+       echo "<br /><br />";
        echo $tweakers->getActorTable($serie->getActors());
+       echo "<br /><br />";
+       echo $tweakers->getLinksTable($serie->getTvDbUrl(), $serie->getIMDbUrl());
 
     } else {
         echo 'Invalide tvDbId. Geen serie gevonden.';
