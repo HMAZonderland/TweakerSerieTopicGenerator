@@ -177,6 +177,7 @@ class TVDbShow
             $this->name             = (string)$data->SeriesName;
             $this->status           = (string)$data->Status;
             $this->last_updated     = (string)$data->lastupdated;
+            $this->tvdb_url         = 'http://thetvdb.com/?tab=series&id=' . $this->id;
 
             // Plaatje maken en cachen
             if (isset($data->banner) && strlen($data->banner)) {
