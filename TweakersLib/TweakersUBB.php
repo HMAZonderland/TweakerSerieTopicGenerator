@@ -168,33 +168,16 @@ class TweakersUBB
     /**
      * Processes all sorts of general information
      *
-     * @param $genre
-     * @param $first_aired
-     * @param $network
-     * @param $rating
-     * @param $status
+     * @param array $generaldata
      *
      * @return string
      */
-    public function getSerieData($genre, $first_aired, $network, $ratings, $status)
+    public function getGeneralData(array $generaldata)
     {
         $str = $this->getThRow(self::createDataArray("Algemene informatie", array("colspan" => 2)));
-        $str .= $this->getTdRow(array(self::createDataArray("Zender/Uitgever"), self::createDataArray($network)));
-        $str .= $this->getTdRow(array(self::createDataArray("Genre"), self::createDataArray($genre)));
-        $str .= $this->getTdRow(array(self::createDataArray("Eerste uitzending"), self::createDataArray($first_aired)));
-
-        $cijfers = "";
-
-        foreach ($ratings as $key => $data) {
-            $cijfers .= $key . ": ";
-            foreach ($data as $key => $val) {
-                $cijfers .= " " . $key . ": " . $val;
-            }
-            $cijfers .= "<br />";
+        foreach ($generaldata as $data => $var) {
+            $str .= $this->getTdRow(array(self::createDataArray($data), self::createDataArray($var)));
         }
-
-        $str .= $this->getTdRow(array(self::createDataArray("Cijfers"), self::createDataArray($cijfers)));
-        $str .= $this->getTdRow(array(self::createDataArray("Status"), self::createDataArray($status)));
 
         return $this->getTable($str);
     }
@@ -208,10 +191,15 @@ class TweakersUBB
     {
         $str = $this->getThRow(self::createDataArray("Acteurs", array("colspan" => 2)));
         foreach ($actors as $actor) {
-            $left = self::createDataArray("[img title='" . $actor->Role . "']" . $actor->Image . "[/img]", array("width" => 1));
-            $right = self::createDataArray($actor->Role . " gespeeld door " . $actor->Name, array("valign" => "top"));
-            $cells = array($left, $right);
-            $str .= $this->getTdRow($cells);
+
+            if (strlen($actor->Image) > 0) {
+                $left = self::createDataArray("[img title='" . $actor->Role . "']" . $actor->Image . "[/img]", array("width" => 1));
+                $right = self::createDataArray($actor->Role . " gespeeld door " . $actor->Name, array("valign" => "top"));
+                $cells = array($left, $right);
+                $str .= $this->getTdRow($cells);
+            }  else {
+                $str .= $this->getTdRow(array(self::createDataArray($actor->Role . " gespeeld door " . $actor->Name)));
+            }
         }
         return $this->getTable($str);
     }
