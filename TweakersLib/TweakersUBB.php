@@ -59,6 +59,73 @@ class TweakersUBB
     }
 
     /**
+     * @param $cell
+     * @return string
+     */
+    private function getTd($cell)
+    {
+        $str = "[td bgcolor=#" . $this->tdBgColor . " ";
+        foreach ($cell as $property => $value) {
+            if ($property != 'data') {
+                $str .= $property . "=" . $value;
+            }
+        }
+        $str .= "]" . $cell['data'] . "[/td]";
+        return $str;
+    }
+
+    /**
+     *
+     * @param array $cells
+     * @param int $colspan
+     * @return string
+     */
+    private function getTdRow(array $cells)
+    {
+        $str  = "[tr]";
+        foreach ($cells as $cell) {
+            $str .= $this->getTd($cell);
+        }
+        $str .= "[/tr]";
+        return $str;
+    }
+
+    /**
+     * @param $cell
+     * @param int $colspan
+     * @return string
+     */
+    private function getThRow(array $cell)
+    {
+        $str  = "[tr]";
+        $str .= "[th bgcolor=#" . $this->thBgColor . " ";
+        foreach ($cell as $property => $value) {
+            if ($property != 'data') {
+                $str .= $property . "=" . $value;
+            }
+        }
+        $str .= "]" . $cell['data'] . "[/th][/tr]";
+        return $str;
+    }
+
+    /**
+     * @param $data
+     * @param array $attributes
+     * @return array
+     */
+    private static function createDataArray($data, array $attributes = null)
+    {
+        $array = array();
+        $array['data'] = $data;
+        if ($attributes != null) {
+            foreach ($attributes as $attribute => $value) {
+                $array[$attribute] = $value;
+            }
+        }
+        return $array;
+    }
+
+    /**
      * Creates a serie topic header containing a banner
      * @param $bannerUrl
      * @param $title
@@ -67,16 +134,9 @@ class TweakersUBB
      */
     public function getSerieHeader($bannerUrl, $title, $plot)
     {
-
-        $str = "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "][img title='" . $title . "']" . $bannerUrl . "[/img][/td]";
-        $str .= "[/tr]";
-        $str .= "[tr]";
-        $str .= "[th bgcolor=#" . $this->thBgColor . "]" . $title . "[/th]";
-        $str .= "[/tr]";
-        $str .= "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $plot . "[/td]";
-        $str .= "[/tr]";
+        $str = $this->getTdRow(array(self::createDataArray("[img title='" . $title . "']" . $bannerUrl . "[/img]")));
+        $str .= $this->getThRow(self::createDataArray($title));
+        $str .= $this->getTdRow(array(self::createDataArray($plot)));
 
         return $this->getTable($str);
     }
@@ -92,39 +152,23 @@ class TweakersUBB
      */
     public function getSerieData($genre, $first_aired, $network, $ratings, $status)
     {
-        $str = "[tr]";
-        $str .= "[th colspan=2 bgcolor=#" . $this->thBgColor . "]Algemene informatie[/th]";
-        $str .= "[/tr]";
-        $str .= "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]Zender/Uitgever[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $network . "[/td]";
-        $str .= "[/tr]";
-        $str .= "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]Genre[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $genre . "[/td]";
-        $str .= "[/tr]";
-        $str .= "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]Eerste uitzending[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $first_aired . "[/td]";
-        $str .= "[/tr]";
-        $str .= "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]Cijfers[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]";
+        $str  = $this->getThRow(self::createDataArray("Algemene informatie", array("colspan" => 2)));
+        $str .= $this->getTdRow(array(self::createDataArray("Zender/Uitgever"), self::createDataArray($network)));
+        $str .= $this->getTdRow(array(self::createDataArray("Genre"), self::createDataArray($genre)));
+        $str .= $this->getTdRow(array(self::createDataArray("Eerste uitzending"), self::createDataArray($first_aired)));
+
+        $cijfers = "";
 
         foreach ($ratings as $key => $data) {
-            $str .= $key . ": ";
+            $cijfers .= $key . ": ";
             foreach ($data as $key => $val) {
-                $str .= " " . $key . ": " . $val;
+                $cijfers .= " " . $key . ": " . $val;
             }
-            $str .= "<br />";
+            $cijfers .= "<br />";
         }
 
-        $str .= "[/td]";
-        $str .= "[/tr]";
-        $str .= "[tr]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]Status[/td]";
-        $str .= "[td bgcolor=#" . $this->tdBgColor . "]" . $status . "[/td]";
-        $str .= "[/tr]";
+        $str .= $this->getTdRow(array(self::createDataArray("Cijfers"), self::createDataArray($cijfers)));
+        $str .= $this->getTdRow(array(self::createDataArray("Status"), self::createDataArray($status)));
 
         return $this->getTable($str);
     }
@@ -135,18 +179,13 @@ class TweakersUBB
      */
     public function getActorTable(SimpleXMLElement $actors)
     {
-
-        $str = "[tr]";
-        $str .= "[th colspan=2 bgcolor=#" . $this->thBgColor . "]Acteurs[/th]";
-        $str .= "[/tr]";
-
+        $str = $this->getThRow(self::createDataArray("Acteurs", array("colspan" => 2)));
         foreach ($actors as $actor) {
-            $str .= "[tr]";
-            $str .= "[td bgcolor=#" . $this->tdBgColor . " width=1][img title='" . $actor->Role . "']" . $actor->Image . "[/img][/td]";
-            $str .= "[td bgcolor=#" . $this->tdBgColor . " valign=top]" . $actor->Role . " gespeeld door " . $actor->Name . "[/td]";
-            $str .= "[/tr]";
+            $left = self::createDataArray("[img title='" . $actor->Role . "']" . $actor->Image . "[/img]", array("width" => 1));
+            $right = self::createDataArray($actor->Role . " gespeeld door " . $actor->Name, array("valign" => "top"));
+            $cells = array($left, $right);
+            $str .= $this->getTdRow($cells);
         }
-
         return $this->getTable($str);
     }
 }
