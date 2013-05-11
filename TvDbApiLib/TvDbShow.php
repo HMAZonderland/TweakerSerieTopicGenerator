@@ -179,13 +179,20 @@ class TVDbShow
             $this->last_updated     = (string)$data->lastupdated;
             $this->tvdb_url         = 'http://thetvdb.com/?tab=series&id=' . $this->id;
 
+
             // Plaatje maken en cachen
             if (isset($data->banner) && strlen($data->banner)) {
                 if (!file_exists($data->banner)) {
-                    $img = new SimpleImage();
-                    $img->load('http://thetvdb.com/banners/' . $data->banner)->fit_to_width(640)->save($data->banner, 80);
+                    // Might happen that the image does not exist
+                    try {
+                        $img = new SimpleImage();
+                        $img->load('http://thetvdb.com/banners/' . $data->banner)->fit_to_width(640)->save($data->banner, 80);
+                        $this->banner = 'http://ultimation.nl/tweakers/' . $data->banner;
+                    } catch (Exception $e) {
+                        echo "Exception occured: " . $e->getMessage() . "<br />";
+                        $this->banner = '';
+                    }
                 }
-                $this->banner = 'http://ultimation.nl/tweakers/' . $data->banner;
             }
         }
     }
@@ -195,10 +202,16 @@ class TVDbShow
         if (isset($actors) && sizeof($actors) > 0) {
             foreach ($actors as $actor) {
                 if (!file_exists($actor->Image)) {
-                    $img = new SimpleImage();
-                    $img->load('http://thetvdb.com/banners/' . $actor->Image)->best_fit(120, 150)->save($actor->Image, 80);
+                    // Might happen that the image does not exists
+                    try {
+                        $img = new SimpleImage();
+                        $img->load('http://thetvdb.com/banners/' . $actor->Image)->best_fit(120, 150)->save($actor->Image, 80);
+                        $actor->Image = 'http://ultimation.nl/tweakers/' . $actor->Image;
+                    } catch (Exception $e) {
+                        echo "Exception occured: " . $e->getMessage() . "<br />";
+                        $actor->Image = '';
+                    }
                 }
-                $actor->Image = 'http://ultimation.nl/tweakers/' . $actor->Image;
             }
         }
         $this->actors = $actors;
