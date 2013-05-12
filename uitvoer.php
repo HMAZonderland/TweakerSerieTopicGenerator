@@ -10,6 +10,7 @@ error_reporting(-1);
 
 require_once dirname(__FILE__) . '/tools/C_URL.tool.php';
 require_once dirname(__FILE__) . '/tools/SimpleXML.tool.php';
+require_once dirname(__FILE__) . '/tools/ArrayToString.tool.php';
 
 require_once dirname(__FILE__) . '/TvDbApiLib/TVDb.php';
 require_once dirname(__FILE__) . '/TvDbApiLib/TvDbShow.php';
@@ -29,7 +30,9 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
        echo $tweakers->getSerieHeader($serie->getBanner(), $serie->getName(), $serie->getLongestPlot());
        echo "<br /><br />";
-       echo $tweakers->getSerieData($serie->getGenresAsString(), $serie->getFirstAirDate(), $serie->getNetwork(), $serie->getRatings(), $serie->getStatus());
+       echo $tweakers->getGeneralData($serie->getGeneralInformation());
+       echo "<br /><br />";
+       echo $tweakers->getTechnicalData($serie->getTechnicalInformation());
        echo "<br /><br />";
        echo $tweakers->getActorTable($serie->getActors());
        echo "<br /><br />";

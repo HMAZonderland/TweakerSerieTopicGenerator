@@ -121,6 +121,60 @@ class TweakersSerie
     }
 
     /**
+     * @return array
+     */
+    public function getGeneralInformation()
+    {
+        $genres             = $this->getGenresAsString();
+        $imdbRatings        = $this->_imdb->rating;
+        $imdbVotes          = $this->_imdb->rating_count;
+        $tvdbRatings        = $this->_tvdb->rating;
+        $tvdbVotes          = $this->_tvdb->rating_count;
+        $status             = $this->getStatus();
+        $network            = $this->getNetwork();
+        $first_air_date     = $this->getFirstAirDate();
+        $filming_locations  = $this->getFilmingLocations();
+        $runtime            = $this->getRuntime();
+        $languages          = $this->getLanguagesAsString();
+
+        $array = array();
+
+        if (strlen($network) > 0)           $array['Uitgever'] = $network;
+        if (strlen($genres) > 0)            $array['Genre'] = $genres;
+        if (strlen($first_air_date) > 0)    $array['Begonnen'] = $first_air_date;
+        if (strlen($imdbRatings) > 0)       $array['IMDb cijfer'] = $imdbRatings . " (" . $imdbVotes . ")";
+        if (strlen($tvdbRatings) > 0)       $array['TvDb cijfer'] = $tvdbRatings . " (" . $tvdbVotes . ")";
+        if (strlen($status) > 0)            $array['Status'] = $status;
+        if (strlen($filming_locations) > 0) $array['Film locaties'] = $filming_locations;
+        if (strlen($runtime) > 0)           $array['Speeltijd'] = $runtime;
+        if (strlen($languages) > 0)         $array['Uitgebracht in talen'] = $languages;
+
+        return $array;
+    }
+
+
+    public function getTechnicalInformation()
+    {
+        $ratio                      = $this->getRatio();
+        $cinematographic_process    = $this->getCinematographicProcessAsString();
+        $cameras                    = $this->getCameraAsString();
+        $printed_film_format        = $this->getPrintedFilmFormat();
+        $film_negativ_format        = $this->getFilmNegativeFormat();
+        $laboratory                 = $this->getLaboratory();
+
+        $array = array();
+
+        if (strlen($ratio) > 0)                     $array['Ratio'] = $ratio;
+        if (strlen($cinematographic_process) > 0)   $array['Cinematografische proces'] = $cinematographic_process;
+        if (strlen($cameras) > 0)                   $array['Camera\'s'] = $cameras;
+        if (strlen($printed_film_format) > 0 )      $array['Film formaat'] = $printed_film_format;
+        if (strlen($film_negativ_format) > 0)       $array['Negatief'] = $film_negativ_format;
+        if (strlen($laboratory) > 0)                $array['Laboratorium'] = $laboratory;
+
+        return $array;
+    }
+
+    /**
      * Combines all the genres on both IMDb and TVDb to one array
      * @return array
      */
@@ -150,32 +204,23 @@ class TweakersSerie
      */
     public function getGenresAsString()
     {
-        $str = '';
-        $genres = $this->getGenres();
-        foreach ($genres as $key => $genre) {
-            $str = $str . $genre . ", ";
-        }
-
-        return substr($str, 0, strlen($str) - 2);
+        return ArrayToString::getStringLineBreakArray($this->getGenres());
     }
 
     /**
-     * Returns a multidimensional array with ratings per used channel
-     * @return array
+     * @return mixed
      */
-    public function getRatings()
+    public function getFilmingLocations()
     {
-        $ratings = array();
+        return $this->_imdb->filming_locations;
+    }
 
-        $ratings['[b]IMDb[/b]'] = array();
-        $ratings['[b]IMDb[/b]']['cijfer'] = $this->_imdb->rating;
-        $ratings['[b]IMDb[/b]']['(stemmen'] = $this->_imdb->rating_count . ')';
-
-        $ratings['[b]TvDb[/b]'] = array();
-        $ratings['[b]TvDb[/b]']['cijfer'] = $this->_tvdb->rating;
-        $ratings['[b]TvDb[/b]']['(stemmen'] = $this->_tvdb->rating_count . ')';
-
-        return $ratings;
+    /**
+     * @return mixed
+     */
+    public function getRuntime()
+    {
+        return $this->_imdb->runtime->item;
     }
 
     /**
@@ -196,4 +241,56 @@ class TweakersSerie
         return $this->_imdb->imdb_url;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRatio()
+    {
+        return $this->_imdb->aspect_ratio;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCinematographicProcessAsString()
+    {
+        return ArrayToString::getStringLineBreak($this->_imdb->cinematographic_process);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCameraAsString()
+    {
+        return ArrayToString::getStringLineBreak($this->_imdb->camera);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrintedFilmFormat()
+    {
+        return ArrayToString::getStringLineBreak($this->_imdb->printed_film_format);
+    }
+
+    /**
+     *
+     */
+    public function getFilmNegativeFormat()
+    {
+        return ArrayToString::getStringLineBreak($this->_imdb->film_negative_format);
+    }
+
+    /**
+     *
+     */
+    public function getLaboratory()
+    {
+        return ArrayToString::getStringLineBreak($this->_imdb->laboratory);
+    }
+
+    public function getLanguagesAsString()
+    {
+        return ArrayToString::getStringLineBreak($this->_imdb->language);
+    }
 }

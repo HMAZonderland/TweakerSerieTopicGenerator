@@ -184,6 +184,21 @@ class TweakersUBB
     }
 
     /**
+     * @param array $technicaldata
+     *
+     * @return string
+     */
+    public function getTechnicalData(array $technicaldata)
+    {
+        $str = $this->getThRow(self::createDataArray("Technische informatie", array("colspan" => 2)));
+        foreach ($technicaldata as $data => $var) {
+            $str .= $this->getTdRow(array(self::createDataArray($data), self::createDataArray($var)));
+        }
+
+        return $this->getTable($str);
+    }
+
+    /**
      * Returns a table containing all the actors
      *
      * @param array $actors
@@ -194,7 +209,7 @@ class TweakersUBB
         foreach ($actors as $actor) {
 
             if (strlen($actor->Image) > 0) {
-                $left = self::createDataArray("[img title='" . $actor->Role . "']" . $actor->Image . "[/img]", array("width" => 1));
+                $left = self::createDataArray("[img title=\"" . $actor->Role . "\"]" . $actor->Image . "[/img]", array("width" => 1));
                 $right = self::createDataArray($actor->Role . " gespeeld door " . $actor->Name, array("valign" => "top"));
                 $cells = array($left, $right);
                 $str .= $this->getTdRow($cells);
