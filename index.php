@@ -34,6 +34,7 @@ if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
     <title>Tweakers.net Serie Topic Generator</title>
 </head>
 <body>
+<h1>Ultimation RuleZZZZ</h1>
 <table border="1" style="border: 1px #000 solid;">
 <form name="searchForm" method="post">
     <tr>
