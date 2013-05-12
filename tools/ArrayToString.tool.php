@@ -19,19 +19,32 @@ class ArrayToString
         foreach ($array as $var) {
             $str .= $var . ', ';
         }
-        substr($str, 0, strlen($str) - 2);
+       return substr($str, 0, strlen($str) - 2);
     }
 
     /**
      * Generates a string with line breaked values from array
      * @param array $array
      */
-    public static function getStringLineBreak(array $array)
+    public static function getStringLineBreakArray($data)
     {
         $str = '';
-        foreach ($array as $var) {
+        foreach ($data->item as $var) {
             $str .= $var . '[br]';
         }
-        substr($str, 0, strlen($str) - 4);
+       return  substr($str, 0, strlen($str) - 4);
+    }
+
+    /**
+     * @param SimpleXMLElement $data
+     *
+     * @return SimpleXMLElement[]|string
+     */
+    public static function getStringLineBreak(SimpleXMLElement $data)
+    {
+        if (is_array($data->item)) {
+            return self::getStringLineBreakArray($data->item);
+        }
+        return $data->item;
     }
 }

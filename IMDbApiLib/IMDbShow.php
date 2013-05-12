@@ -151,9 +151,13 @@ class IMDbShow {
     /**
      *
      */
-    public function __construct(SimpleXMLElement $data = null) {
-        if ($data != null) {
+    public function __construct(SimpleXMLElement $data = null)
+    {
+        /*echo "<pre>";
+        print_r($data);
+        echo "</pre>";*/
 
+        if ($data != null) {
             $this->imdb_id                  =       $data->imdb_id;
             $this->imdb_url                 =       $data->imdb_url;
             $this->title                    =       $data->title;
@@ -170,13 +174,14 @@ class IMDbShow {
             $this->poster                   =       $data->poster;
             $this->language                 =       $data->language;
             $this->country                  =       $data->country;
-            $this->aspect_ratio             =       $data->aspect_ratio;
-            $this->cinematographic_process  =       $data->cinematographic_process;
-            $this->camera                   =       $data->camera;
-            $this->printed_film_format      =       $data->printed_film_format;
-            $this->film_negative_format     =       $data->film_negative_format;
+            $this->aspect_ratio             =       $data->technical->aspect_ratio;
+            $this->cinematographic_process  =       $data->technical->cinematographic_process;
+            $this->camera                   =       $data->technical->camera;
+            $this->printed_film_format      =       $data->technical->printed_film_format;
+            $this->film_negative_format     =       $data->technical->film_negative_format;
             $this->filming_locations        =       $data->filming_locations;
             $this->runtime                  =       $data->runtime;
+            $this->laboratory               =       $data->technical->laboratory;
         }
     }
 }
