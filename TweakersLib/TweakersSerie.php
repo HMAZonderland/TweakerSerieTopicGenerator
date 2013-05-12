@@ -212,6 +212,7 @@ class TweakersSerie
     }
 
     /**
+     * Returns the filming locations
      * @return mixed
      */
     public function getFilmingLocations()
@@ -220,11 +221,12 @@ class TweakersSerie
     }
 
     /**
+     * Returns the runtime of an episode
      * @return mixed
      */
     public function getRuntime()
     {
-        return $this->_imdb->runtime->item;
+        return $this->_imdb->runtime;
     }
 
     /**
@@ -246,6 +248,7 @@ class TweakersSerie
     }
 
     /**
+     * Returns the ratio used
      * @return mixed
      */
     public function getRatio()
@@ -254,47 +257,56 @@ class TweakersSerie
     }
 
     /**
+     * Returns the cinematographic process
      * @return string
      */
     public function getCinematographicProcessAsString()
     {
-        return ArrayToString::getStringLineBreak($this->_imdb->cinematographic_process);
+        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->cinematographic_process));
     }
 
     /**
+     * Returns all camera's used in a string
      * @return string
      */
     public function getCameraAsString()
     {
-        return ArrayToString::getStringLineBreak($this->_imdb->camera);
+        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->camera));
     }
 
     /**
+     * Returns which film format the serie is produced on
      * @return mixed
      */
     public function getPrintedFilmFormat()
     {
-        return ArrayToString::getStringLineBreak($this->_imdb->printed_film_format);
+        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->printed_film_format));
     }
 
     /**
-     *
+     * Returns which negativ the film is printed on
+     * @return SimpleXMLElement[]|string
      */
     public function getFilmNegativeFormat()
     {
-        return ArrayToString::getStringLineBreak($this->_imdb->film_negative_format);
+        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->film_negative_format));
     }
 
     /**
-     *
+     * Returns laboratories used for the series
+     * @return SimpleXMLElement[]|string
      */
     public function getLaboratory()
     {
-        return ArrayToString::getStringLineBreak($this->_imdb->laboratory);
+        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->laboratory));
     }
 
+    /**
+     * Returns all languages this serie is brought out with
+     * @return SimpleXMLElement[]|string
+     */
     public function getLanguagesAsString()
     {
-        return ArrayToString::getStringLineBreak($this->_imdb->language);
+        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->language));
     }
 }
