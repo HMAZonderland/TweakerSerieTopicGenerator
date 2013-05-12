@@ -121,6 +121,7 @@ class TweakersSerie
     }
 
     /**
+     * Collects all general information about the serie and returns this in an array
      * @return array
      */
     public function getGeneralInformation()
@@ -142,8 +143,8 @@ class TweakersSerie
         if (strlen($network) > 0)           $array['Uitgever'] = $network;
         if (strlen($genres) > 0)            $array['Genre'] = $genres;
         if (strlen($first_air_date) > 0)    $array['Begonnen'] = $first_air_date;
-        if (strlen($imdbRatings) > 0)       $array['IMDb cijfer'] = $imdbRatings . " (" . $imdbVotes . ")";
-        if (strlen($tvdbRatings) > 0)       $array['TvDb cijfer'] = $tvdbRatings . " (" . $tvdbVotes . ")";
+        if (strlen($imdbRatings) > 0)       $array['IMDb cijfer'] = $imdbRatings . " (" . $imdbVotes . " stemmen)";
+        if (strlen($tvdbRatings) > 0)       $array['TvDb cijfer'] = $tvdbRatings . " (" . $tvdbVotes . " stemmen)";
         if (strlen($status) > 0)            $array['Status'] = $status;
         if (strlen($filming_locations) > 0) $array['Film locaties'] = $filming_locations;
         if (strlen($runtime) > 0)           $array['Speeltijd'] = $runtime;
@@ -152,7 +153,10 @@ class TweakersSerie
         return $array;
     }
 
-
+    /**
+     * Collects more technical information about the serie and returns this in an array
+     * @return array
+     */
     public function getTechnicalInformation()
     {
         $ratio                      = $this->getRatio();
