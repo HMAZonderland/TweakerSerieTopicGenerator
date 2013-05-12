@@ -18,6 +18,20 @@ section {
     padding: 10px;
 }
 
+serielijst {
+    position: fixed;
+    top: 10%;
+    left: 30%;
+
+    width: 400px;
+
+    border: 1px dodgerblue solid;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+
+    padding: 10px;
+}
+
 input {
     color: white;
     background-color: dodgerblue;

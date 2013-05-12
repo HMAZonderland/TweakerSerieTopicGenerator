@@ -10,23 +10,6 @@ require_once dirname(__FILE__) . '/SimpleImageLib/SimpleImage.class.php';
 require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
 require_once dirname(__FILE__) . '/IMDbApiLib/IMDb.php';
 
-if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
-
-    $tvdb = new TVDb();
-    $shows = $tvdb->search_tv_shows($_POST['query']);
-
-    if (sizeof($shows) > 1) {
-        foreach ($shows as $show) {
-            echo "<a href=\"uitvoer.php?tvDbId=" . $show->id . "\"> " . $show->name . " [begonnen in " . $show->first_aired . "]</a><br />";
-        }
-    } elseif (sizeof($shows) == 1) {
-        $show = $shows[0];
-        header('location: uitvoer.php?tvDbId=' . $show->id . '');
-    } else {
-        echo "<p>Geen series gevonden met die naam. Probeer een andere omschrijving.</p>";
-    }
-}
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,14 +23,42 @@ if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
     <script src="scripts/jquery.metro.js" type="text/javascript" ></script>
 </head>
 <body>
+<?php
+
+if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
+
+    $tvdb = new TVDb();
+    $shows = $tvdb->search_tv_shows($_POST['query']);
+
+    if (sizeof($shows) > 1) {
+        echo "<serielijst>";
+        echo "<h3 class=\"accent\">Welk van onderstaande series?</h3><br />";
+        foreach ($shows as $show) {
+            echo "<h6><a href=\"uitvoer.php?tvDbId=" . $show->id . "\"> " . $show->name . " [begonnen in " . $show->first_aired . "]</a></h6><br />";
+        }
+        echo "</serielijst>";
+    } elseif (sizeof($shows) == 1) {
+        $show = $shows[0];
+        header('location: uitvoer.php?tvDbId=' . $show->id . '');
+    } else {
+        echo "<section>";
+        echo "<h3 class=\"accent\">Geen series gevonden met die naam</h3>";
+        echo "<h6><a href=\"index.php\">Probeer het opnieuw</a></h6>";
+        echo "</section>";
+    }
+} else {
+?>
     <section>
         <h2 class="accent">Voer een titel in</h2>
         <br />
         <form name="searchForm" method="post">
             <div class="inputwrap">
                 <p><input type="text" name="query" size="46" /><input type="submit" name="search" value="Zoek serie!" /></p>
-            /div>
+            </div>
         </form>
     </section>
+<?php
+}
+?>
 </body>
 </html>
