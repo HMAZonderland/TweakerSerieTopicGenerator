@@ -174,14 +174,14 @@ class IMDbShow {
             $this->poster                   =       $data->poster;
             $this->language                 =       $data->language;
             $this->country                  =       $data->country;
-            $this->aspect_ratio             =       $data->technical->aspect_ratio;
-            $this->cinematographic_process  =       $data->technical->cinematographic_process;
-            $this->camera                   =       $data->technical->camera;
-            $this->printed_film_format      =       $data->technical->printed_film_format;
-            $this->film_negative_format     =       $data->technical->film_negative_format;
+            $this->aspect_ratio             =       $data->technical->aspect_ratio->item;
+            $this->cinematographic_process  =       $data->technical->cinematographic_process->item;
+            $this->camera                   =       $data->technical->camera->item;
+            $this->printed_film_format      =       $data->technical->printed_film_format->item;
+            $this->film_negative_format     =       $data->technical->film_negative_format->item;
             $this->filming_locations        =       $data->filming_locations;
-            $this->runtime                  =       $data->runtime;
-            $this->laboratory               =       $data->technical->laboratory;
+            $this->runtime                  =       $data->runtime->item;
+            $this->laboratory               =       $data->technical->laboratory->item;
         }
     }
 }
