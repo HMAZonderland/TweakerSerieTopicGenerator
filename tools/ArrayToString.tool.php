@@ -11,40 +11,46 @@ class ArrayToString
 {
     /**
      * Generates a string with comma seperated values from array
+     *
      * @param array $array
      */
     public static function getString(array $array)
     {
         $str = '';
-        foreach ($array as $var) {
+        foreach ($array as $key => $var) {
             $str .= $var . ', ';
         }
-       return substr($str, 0, strlen($str) - 2);
+        return substr($str, 0, strlen($str) - 2);
     }
 
     /**
-     * Generates a string with line breaked values from array
-     * @param array $array
+     * Generates a string with line breaked values from an array
+     *
+     * @param array $data
      */
     public static function getStringLineBreakArray($data)
     {
         $str = '';
-        foreach ($data->item as $var) {
+        foreach ($data as $key => $var) {
             $str .= $var . '[br]';
         }
-       return  substr($str, 0, strlen($str) - 4);
+        return substr($str, 0, strlen($str) - 4);
     }
 
     /**
+     * Used to create a string where its values are seperated by [br]
+     *
      * @param SimpleXMLElement $data
      *
      * @return SimpleXMLElement[]|string
      */
-    public static function getStringLineBreak(SimpleXMLElement $data)
+    public static function getStringLineBreak($data)
     {
-        if (is_array($data->item)) {
-            return self::getStringLineBreakArray($data->item);
+        if (is_array($data)) {
+            return self::getStringLineBreakArray($data);
+        } else {
+            // When its no array its an one-lined string, so we can return this directly without a [br] tag.
+            return $data;
         }
-        return $data->item;
     }
 }
