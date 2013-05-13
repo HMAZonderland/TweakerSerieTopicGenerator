@@ -23,8 +23,17 @@ require_once dirname(__FILE__) . '/TweakersLib/TweakersSerie.php';
 
 if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
+    // Colors
+    $borderColor = $_GET['borderColor'];
+    $tableBgColor = $_GET['tableBgColor'];
+    $tdBgColor = $_GET['tdBgColor'];
+    $thBgColor = $_GET['thBgColor'];
+
+    // All Serie data IMDb & TvDb combinend
     $serie = TweakersSerie::getSerieByTvDbId($_GET['tvDbId']);
-    $tweakers = new TweakersUBB();
+
+    // UBB class
+    $tweakers = new TweakersUBB($borderColor, $tableBgColor, $tdBgColor, $thBgColor);
 
     if (strlen($serie->getName()) > 0) {
 

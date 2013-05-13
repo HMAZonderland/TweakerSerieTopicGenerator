@@ -9,9 +9,9 @@ section {
     left: 30%;
 
     width: 400px;
-    height: 110px;
+    height: 370px;
 
-    border: 1px dodgerblue solid;
+    border: 1px #1BA1E2 solid;
     -moz-border-radius: 15px;
     border-radius: 15px;
 
@@ -23,9 +23,9 @@ serielijst {
     top: 10%;
     left: 30%;
 
-    width: 400px;
+    width: 500px;
 
-    border: 1px dodgerblue solid;
+    border: 1px #1BA1E2 solid;
     -moz-border-radius: 15px;
     border-radius: 15px;
 
@@ -34,8 +34,8 @@ serielijst {
 
 input {
     color: white;
-    background-color: dodgerblue;
-    border-color: dodgerblue;
+    background-color: #1BA1E2;
+    border-color: #1BA1E2;
     border: none;
 }
 
@@ -44,5 +44,13 @@ input [type="submit"] {
 }
 
 .inputwrap {
-   background-color: dodgerblue;
+   background-color: #1BA1E2;
+}
+
+.color {
+    border: 1px solid #1BA1E2;
+}
+
+p {
+    color: #1BA1E2;
 }
