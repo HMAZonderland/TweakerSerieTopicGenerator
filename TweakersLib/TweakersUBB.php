@@ -167,31 +167,18 @@ class TweakersUBB
     }
 
     /**
-     * Processes all sorts of general information
+     * Processes an array containing data.
+     * Could be used for general- and technical information about the serie or links to website
      *
-     * @param array $generaldata
-     *
-     * @return string
-     */
-    public function getGeneralData(array $generaldata)
-    {
-        $str = $this->getThRow(self::createDataArray("Algemene informatie", array("colspan" => 2)));
-        foreach ($generaldata as $data => $var) {
-            $str .= $this->getTdRow(array(self::createDataArray($data), self::createDataArray($var)));
-        }
-
-        return $this->getTable($str);
-    }
-
-    /**
-     * @param array $technicaldata
+     * @param       $title
+     * @param array $blockData
      *
      * @return string
      */
-    public function getTechnicalData(array $technicaldata)
+    public function getDataBlock($title, array $blockData)
     {
-        $str = $this->getThRow(self::createDataArray("Technische informatie", array("colspan" => 2)));
-        foreach ($technicaldata as $data => $var) {
+        $str = $this->getThRow(self::createDataArray($title, array("colspan" => 2)));
+        foreach ($blockData as $data => $var) {
             $str .= $this->getTdRow(array(self::createDataArray($data), self::createDataArray($var)));
         }
 

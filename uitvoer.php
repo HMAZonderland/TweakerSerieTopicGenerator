@@ -30,9 +30,9 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
        echo $tweakers->getSerieHeader($serie->getBanner(), $serie->getName(), $serie->getLongestPlot());
        echo "<br /><br />";
-       echo $tweakers->getGeneralData($serie->getGeneralInformation());
+       echo $tweakers->getDataBlock("Algemene informatie", $serie->getGeneralInformation());
        echo "<br /><br />";
-       echo $tweakers->getTechnicalData($serie->getTechnicalInformation());
+       echo $tweakers->getDataBlock("Technische informatie", $serie->getTechnicalInformation());
        echo "<br /><br />";
        echo $tweakers->getActorTable($serie->getActors());
        echo "<br /><br />";
