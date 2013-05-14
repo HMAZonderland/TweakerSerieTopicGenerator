@@ -41,7 +41,7 @@ if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
         echo "<serielijst>";
         echo "<h3 class=\"accent\">Welk van onderstaande series?</h3><br />";
         foreach ($shows as $show) {
-            echo "<h6 class=\"accent\"><a href=\"uitvoer.php?tvDbId=" . $show->id . "&borderColor=" . $borderColor . "&tableBgColor=" . $tableBgColor . "&tdBgColor=" . $tdBgColor . "&thBgColor=" . $thBgColor . \"> " . $show->name . " [begonnen in " . $show->first_aired . "]</a></h6><br />";
+            echo "<h6 class=\"accent\"><a href=\"uitvoer.php?tvDbId=" . $show->id . "&borderColor=" . $borderColor . "&tableBgColor=" . $tableBgColor . "&tdBgColor=" . $tdBgColor . "&thBgColor=" . $thBgColor . "\">" . $show->name . " [begonnen in " . $show->first_aired . "]</a></h6><br />";
         }
         echo "</serielijst><br /><br />";
     } elseif (sizeof($shows) == 1) {
@@ -59,17 +59,27 @@ if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
         <h2 class="accent">Voer een titel in</h2>
         <br />
         <form name="searchForm" method="post">
+            <table>
+                <tr>
+                    <td>Selecteer een border color</td>
+                    <td><input name="borderColor" class="color" value="000000"></td>
+                </tr>
+                <tr>
+                    <td>Selecteer een tabel background color</td>
+                    <td><input name="tableBgColor" class="color" value="000000"></td>
+                </tr>
+                <tr>
+                    <td>Selecteer een td background color</td>
+                    <td><input name="tdBgColor" class="color" value="FFFFFF"></td>
+                </tr>
+                <tr>
+                    <td>Selecteer een th background color</td>
+                    <td><input name="thBgColor" class="color" value="000000"></td>
+                </tr>
+            </table>
             <div class="inputwrap">
                 <p><input type="text" name="query" size="46" /><input type="submit" name="search" value="Zoek serie!" /></p>
             </div>
-            <p>Selecteer een border color</p>
-            <p>#<input name="borderColor" class="color" value="000000"></p>
-            <p>Selecteer een tabel background color</p>
-            <p>#<input name="tableBgColor" class="color" value="000000"></p>
-            <p>Selecteer een td background color</p>
-            <p>#<input name="tdBgColor" class="color" value="FFFFFF"></p>
-            <p>Selecteer een th background color</p>
-            <p>#<input name="thBgColor" class="color" value="000000"></p>
         </form>
     </section>
 <?php
