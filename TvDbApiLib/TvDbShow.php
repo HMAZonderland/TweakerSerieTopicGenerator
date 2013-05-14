@@ -191,7 +191,7 @@ class TVDbShow
                         $this->banner = '';
                     }
                 }
-                $this->banner = 'http://ultimation.nl/tweakers/' . $data->banner;
+                $this->banner = 'http://serie.ultimation.nl/' . $data->banner;
             }
         }
     }
@@ -211,7 +211,7 @@ class TVDbShow
                             $actor->Image = '';
                         }
                     }
-                    $actor->Image = 'http://ultimation.nl/tweakers/' . $actor->Image;
+                    $actor->Image = 'http://serie.ultimation.nl/' . $actor->Image;
                 }
                 addslashes($actor->Name);
             }
