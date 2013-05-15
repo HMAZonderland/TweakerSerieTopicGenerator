@@ -25,10 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/**
- * The TV Db API key to use. You can register for one here: http://thetvdb.com/?tab=apiregister
- */
-define('TVDB_API_KEY', '48BDF4BD200BDE48');
 
 /**
  * The TV Db API class
