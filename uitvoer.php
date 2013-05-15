@@ -8,18 +8,8 @@
  */
 error_reporting(-1);
 
-require_once dirname(__FILE__) . '/tools/C_URL.tool.php';
-require_once dirname(__FILE__) . '/tools/SimpleXML.tool.php';
-require_once dirname(__FILE__) . '/tools/ArrayToString.tool.php';
-
-require_once dirname(__FILE__) . '/TvDbApiLib/TVDb.php';
-require_once dirname(__FILE__) . '/TvDbApiLib/TvDbShow.php';
-require_once dirname(__FILE__) . '/TvDbApiLib/TvDbEpisode.php';
-require_once dirname(__FILE__) . '/SimpleImageLib/SimpleImage.class.php';
-require_once dirname(__FILE__) . '/IMDbApiLib/IMDb.php';
-require_once dirname(__FILE__) . '/IMDbApiLib/IMDbShow.php';
-require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
-require_once dirname(__FILE__) . '/TweakersLib/TweakersSerie.php';
+// Includes
+require_once dirname(__FILE__) . '/config.php';
 
 if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
