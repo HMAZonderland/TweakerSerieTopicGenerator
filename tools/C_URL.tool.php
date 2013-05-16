@@ -10,11 +10,6 @@
 class C_URL
 {
     /**
-     * Defines this application.
-     */
-    const USERAGENT = USER_AGENT;
-
-    /**
      * Gets the contents of a URL
      *
      * Attempts to use the following methods:

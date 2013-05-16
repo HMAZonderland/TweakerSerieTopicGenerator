@@ -36,6 +36,8 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
        echo $tweakers->getActorTable($serie->getActors());
        echo "<br /><br />";
        echo $tweakers->getLinksTable($serie->getTvDbUrl(), $serie->getIMDbUrl());
+       echo "<br /><br />";
+       $serie->getEpisodesData();
 
     } else {
         echo 'Invalide tvDbId. Geen serie gevonden.';

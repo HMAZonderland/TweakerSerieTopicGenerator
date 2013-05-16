@@ -4,7 +4,12 @@
  */
 define('TVDB_API_KEY',          '');
 define('BIERDOPJE_API_KEY',     '');
+
 define('USER_AGENT',            'TweakerSerieTopicGenerator/1.0');
+define('ICON_URL',              'http://icon.ultimation.nl/');
+
+// Date time some for comparison
+date_default_timezone_set('Europe/Amsterdam');
 
 // Tools
 require_once dirname(__FILE__) . '/tools/C_URL.tool.php';

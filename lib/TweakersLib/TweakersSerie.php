@@ -76,7 +76,7 @@ class TweakersSerie
      * Returns first date aired
      * @return string
      */
-    public function getFirstAirDate()
+    private function getFirstAirDate()
     {
         return $this->_tvdb->first_aired;
     }
@@ -85,7 +85,7 @@ class TweakersSerie
      * Returns the network making the serie
      * @return string
      */
-    public function getNetwork()
+    private function getNetwork()
     {
         return $this->_tvdb->network;
     }
@@ -94,7 +94,7 @@ class TweakersSerie
      * Returns the serie status
      * @return string
      */
-    public function getStatus()
+    private function getStatus()
     {
         return $this->_tvdb->status;
     }
@@ -105,6 +105,7 @@ class TweakersSerie
      */
     public function getActors()
     {
+        // More complete data than IMDb has
         return $this->_tvdb->actors;
     }
 
@@ -182,7 +183,7 @@ class TweakersSerie
      * Combines all the genres on both IMDb and TVDb to one array
      * @return array
      */
-    public function getGenres()
+    private function getGenres()
     {
         $genres = array();
 
@@ -206,7 +207,7 @@ class TweakersSerie
      * Returns all the series genres in 1 string comma seperated
      * @return string
      */
-    public function getGenresAsString()
+    private function getGenresAsString()
     {
         return ArrayToString::getStringLineBreakArray($this->getGenres());
     }
@@ -215,7 +216,7 @@ class TweakersSerie
      * Returns the filming locations
      * @return mixed
      */
-    public function getFilmingLocations()
+    private function getFilmingLocations()
     {
         return $this->_imdb->filming_locations;
     }
@@ -224,7 +225,7 @@ class TweakersSerie
      * Returns the runtime of an episode
      * @return mixed
      */
-    public function getRuntime()
+    private function getRuntime()
     {
         return $this->_imdb->runtime;
     }
@@ -251,7 +252,7 @@ class TweakersSerie
      * Returns the ratio used
      * @return mixed
      */
-    public function getRatio()
+    private function getRatio()
     {
         return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->aspect_ratio));
     }
@@ -260,7 +261,7 @@ class TweakersSerie
      * Returns the cinematographic process
      * @return string
      */
-    public function getCinematographicProcessAsString()
+    private function getCinematographicProcessAsString()
     {
         return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->cinematographic_process));
     }
@@ -269,7 +270,7 @@ class TweakersSerie
      * Returns all camera's used in a string
      * @return string
      */
-    public function getCameraAsString()
+    private function getCameraAsString()
     {
         return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->camera));
     }
@@ -278,7 +279,7 @@ class TweakersSerie
      * Returns which film format the serie is produced on
      * @return mixed
      */
-    public function getPrintedFilmFormat()
+    private function getPrintedFilmFormat()
     {
         return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->printed_film_format));
     }
@@ -287,7 +288,7 @@ class TweakersSerie
      * Returns which negativ the film is printed on
      * @return SimpleXMLElement[]|string
      */
-    public function getFilmNegativeFormat()
+    private function getFilmNegativeFormat()
     {
         return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->film_negative_format));
     }
@@ -296,7 +297,7 @@ class TweakersSerie
      * Returns laboratories used for the series
      * @return SimpleXMLElement[]|string
      */
-    public function getLaboratory()
+    private function getLaboratory()
     {
         return ArrayToString::getStringLineBreak($this->_imdb->laboratory);
     }
@@ -305,8 +306,65 @@ class TweakersSerie
      * Returns all languages this serie is brought out with
      * @return SimpleXMLElement[]|string
      */
-    public function getLanguagesAsString()
+    private function getLanguagesAsString()
     {
         return ArrayToString::getStringLineBreak($this->_imdb->language);
+    }
+
+    /**
+     * Creates an array containing all the episodes per season.
+     *
+     * @return array
+     */
+    public function getEpisodesData()
+    {
+        // Optimized array to process in the UBB code
+        $episodes = array();
+
+        // I know the TvDb offers more detailed information about the episode than IMDb does, so we go for that array.
+        foreach ($this->_tvdb->episodes as $episode) {
+            // No need for the specials
+            if ($episode->season_number > 0) {
+                $episodes[$episode->season_number][$episode->episode_number]['Aflevering'] = $episode->episode_number;
+                $episodes[$episode->season_number][$episode->episode_number]['Naam'] = $episode->episode_name;
+                $episodes[$episode->season_number][$episode->episode_number]['Omschrijving'] = $episode->overview;
+                $episodes[$episode->season_number][$episode->episode_number]['Uitzend datum'] = $episode->first_aired;
+                $episodes[$episode->season_number][$episode->episode_number]['icon'] = $this->isBroadcastedIcon($episode->first_aired);
+
+            }
+        }
+
+        echo "<pre>";
+        //print_r($this->_tvdb->episodes);
+        print_r($episodes);
+        echo "</pre>";
+        die();
+
+        return $episodes;
+    }
+
+    /**
+     * Checks if a date is in the past
+     *
+     * @param $broadcastDate
+     *
+     * @return bool
+     */
+    private function episodeBroadcasted($broadcastDate)
+    {
+        return ((strtotime($broadcastDate) < time()));
+    }
+
+    /**
+     * @param $broadcastDate
+     *
+     * @return string
+     */
+    private function isBroadcastedIcon($broadcastDate)
+    {
+         if ($this->episodeBroadcasted($broadcastDate)) {
+             return ICON_URL .'accept.png';
+         }
+        return ICON_URL . 'cancel.png';
     }
 }
