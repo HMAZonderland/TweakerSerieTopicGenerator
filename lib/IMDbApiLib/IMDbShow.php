@@ -153,35 +153,33 @@ class IMDbShow {
      */
     public function __construct(SimpleXMLElement $data = null)
     {
-        /*echo "<pre>";
-        print_r($data);
-        echo "</pre>";*/
-
         if ($data != null) {
-            $this->imdb_id                  =       $data->imdb_id;
-            $this->imdb_url                 =       $data->imdb_url;
-            $this->title                    =       $data->title;
-            $this->plot                     =       $data->plot;
-            $this->plot_simple              =       $data->plot_simple;
-            $this->rating                   =       $data->rating;
-            $this->rating_count             =       $data->rating_count;
-            $this->year                     =       $data->year;
-            $this->genres                   =       (array) $data->genres->item;
-            $this->rated                    =       $data->rated;
-            $this->episodes                 =       $data->episodes;
-            $this->actors                   =       $data->actors;
-            $this->type                     =       $data->type;
-            $this->poster                   =       $data->poster;
-            $this->language                 =       $data->language;
-            $this->country                  =       $data->country;
+            $this->imdb_id                  =       (string) $data->imdb_id;
+            $this->imdb_url                 =       (string) $data->imdb_url;
+            $this->title                    =       (string) $data->title;
+            $this->plot                     =       (string) $data->plot;
+            $this->plot_simple              =       (string) $data->plot_simple;
+            $this->rating                   =       (double) $data->rating;
+            $this->rating_count             =       (int) $data->rating_count;
+            $this->year                     =       (string) $data->year;
+            $this->genres                   =       (array) $data->genres;
+            $this->rated                    =       (string) $data->rated;
+            //$this->episodes                 =       $data->episodes;
+            $this->actors                   =       (array) $data->actors;
+            $this->type                     =       (string) $data->type;
+            $this->poster                   =       (string) $data->poster;
+            $this->language                 =       (array) $data->language;
+            $this->country                  =       (array) $data->country;
             $this->aspect_ratio             =       $data->technical->aspect_ratio->item;
             $this->cinematographic_process  =       $data->technical->cinematographic_process->item;
             $this->camera                   =       $data->technical->camera->item;
             $this->printed_film_format      =       $data->technical->printed_film_format->item;
             $this->film_negative_format     =       $data->technical->film_negative_format->item;
-            $this->filming_locations        =       $data->filming_locations;
-            $this->runtime                  =       $data->runtime->item;
-            $this->laboratory               =       $data->technical->laboratory->item;
+            $this->filming_locations        =       (string) $data->filming_locations;
+            $this->runtime                  =       (string) $data->runtime->item;
+            $this->laboratory               =       (string) $data->technical->laboratory;
         }
+
+        return $this;
     }
 }

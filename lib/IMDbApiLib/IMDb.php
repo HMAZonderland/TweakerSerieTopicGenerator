@@ -28,6 +28,12 @@ class IMDb {
         $url = self::IMDBAPI . '?id=' . $imDbId . '&type=xml&plot=full&episode=1&lang=en-US&aka=simple&release=simple&business=1&tech=1';
         $this->_IMDBXML = SimpleXML::get_xml_url_contents($url);
 
-        return new IMDbShow($this->_IMDBXML);
+        $show = new IMDbShow($this->_IMDBXML);
+
+        foreach ($this->_IMDBXML->episodes->item as $ep) {
+            $show->episodes[] = new IMDbEpisode($ep);
+        }
+
+        return $show;
     }
 }
