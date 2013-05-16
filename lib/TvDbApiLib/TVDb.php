@@ -141,7 +141,15 @@ class TVDb
 		$this->tvdb_zip_mirror_url    = $this->pick_random_mirror($mirrors, 4);
 	}
 
-	private function pick_random_mirror(SimpleXMLElement $mirrors, $typemask)
+    /**
+     * Picks a mirror
+     *
+     * @param SimpleXMLElement $mirrors
+     * @param                  $typemask
+     *
+     * @return string
+     */
+    private function pick_random_mirror(SimpleXMLElement $mirrors, $typemask)
 	{
 		$mirrors_count = count($mirrors) - 1;
 		
