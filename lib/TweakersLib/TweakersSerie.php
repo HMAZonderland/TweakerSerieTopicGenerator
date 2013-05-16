@@ -187,7 +187,7 @@ class TweakersSerie
         $genres = array();
 
         $tvdbGenres = $this->_tvdb->genre;
-        $imdbGenres = $this->_imdb->genres;
+        $imdbGenres = SimpleXML::SimpleXMLElementToArray($this->_imdb->genres);
 
         foreach ($tvdbGenres as $tvdbGenre) {
             array_push($genres, $tvdbGenre);
@@ -253,7 +253,7 @@ class TweakersSerie
      */
     public function getRatio()
     {
-        return $this->_imdb->aspect_ratio;
+        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->aspect_ratio));
     }
 
     /**

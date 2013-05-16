@@ -269,7 +269,7 @@ class TVDb
 
 		$show = new TVDbShow($result->Series);
         $show->setActors($actors);
-		
+
 		foreach($result->Episode as $epi) {
 			$show->episodes[] = new TVDbEpisode($epi);
         }

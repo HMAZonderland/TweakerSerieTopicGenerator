@@ -170,11 +170,11 @@ class IMDbShow {
             $this->poster                   =       (string) $data->poster;
             $this->language                 =       (array) $data->language;
             $this->country                  =       (array) $data->country;
-            $this->aspect_ratio             =       $data->technical->aspect_ratio->item;
-            $this->cinematographic_process  =       $data->technical->cinematographic_process->item;
-            $this->camera                   =       $data->technical->camera->item;
-            $this->printed_film_format      =       $data->technical->printed_film_format->item;
-            $this->film_negative_format     =       $data->technical->film_negative_format->item;
+            $this->aspect_ratio             =       (array) $data->technical->aspect_ratio;
+            $this->cinematographic_process  =       (array) $data->technical->cinematographic_process;
+            $this->camera                   =       (array) $data->technical->camera;
+            $this->printed_film_format      =       (array) $data->technical->printed_film_format;
+            $this->film_negative_format     =       (array) $data->technical->film_negative_format;
             $this->filming_locations        =       (string) $data->filming_locations;
             $this->runtime                  =       (string) $data->runtime->item;
             $this->laboratory               =       (string) $data->technical->laboratory;

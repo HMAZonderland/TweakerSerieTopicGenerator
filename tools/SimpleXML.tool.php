@@ -43,7 +43,7 @@ class SimpleXML
                 array_push($array, $var);
             }
         }
-        return $array;
+        return $array[0];
 
     }
 }
