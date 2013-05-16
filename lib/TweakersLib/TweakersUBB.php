@@ -224,8 +224,8 @@ class TweakersUBB
     public function getLinksTable($tvdbUrl, $imdbUrl)
     {
         $str  = $this->getThRow(self::createDataArray("Links", array("colspan" => 2)));
-        $str .= $this->getTdRow(array(self::createDataArray("IMDb"), self::createDataArray($tvdbUrl)));
-        $str .= $this->getTdRow(array(self::createDataArray("TvDb"), self::createDataArray($imdbUrl)));
+        $str .= $this->getTdRow(array(self::createDataArray("IMDb"), self::createDataArray($imdbUrl)));
+        $str .= $this->getTdRow(array(self::createDataArray("TvDb"), self::createDataArray($tvdbUrl)));
         return $this->getTable($str);
     }
 }
