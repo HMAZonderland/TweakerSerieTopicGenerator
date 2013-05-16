@@ -161,14 +161,8 @@ class TVDb
 	 */
 	private function get_xml_url_contents($url)
 	{
-		$data = $this->get_url_contents($url);
-
-		if($data === false) {
-			return false;
-        }
-
-		return simplexml_load_string($data);
-	}
+		return SimpleXML::get_xml_url_contents($url);
+    }
 
 	/**
 	 * Gets the contents of a URL
