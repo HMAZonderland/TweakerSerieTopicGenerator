@@ -2,7 +2,9 @@
 /**
  * The TV Db API key to use. You can register for one here: http://thetvdb.com/?tab=apiregister
  */
-define('TVDB_API_KEY', '');
+define('TVDB_API_KEY',          '');
+define('BIERDOPJE_API_KEY',     '');
+define('USER_AGENT',            'TweakerSerieTopicGenerator/1.0');
 
 // Tools
 require_once dirname(__FILE__) . '/tools/C_URL.tool.php';
@@ -18,12 +20,13 @@ require_once dirname(__FILE__) . '/lib/TvDbApiLib/TvDbShow.php';
 require_once dirname(__FILE__) . '/lib/TvDbApiLib/TvDbEpisode.php';
 
 // IMDb
-require_once dirname(__FILE__) . '/IMDbApiLib/IMDb.php';
-require_once dirname(__FILE__) . '/IMDbApiLib/IMDbShow.php';
+require_once dirname(__FILE__) . '/lib/IMDbApiLib/IMDb.php';
+require_once dirname(__FILE__) . '/lib/IMDbApiLib/IMDbShow.php';
+require_once dirname(__FILE__) . '/lib/IMDbApiLib/IMDbEpisode.php';
 
 // Tweakers
-require_once dirname(__FILE__) . '/TweakersLib/TweakersUBB.php';
-require_once dirname(__FILE__) . '/TweakersLib/TweakersSerie.php';
+require_once dirname(__FILE__) . '/lib/TweakersLib/TweakersUBB.php';
+require_once dirname(__FILE__) . '/lib/TweakersLib/TweakersSerie.php';
 
 
 ?>

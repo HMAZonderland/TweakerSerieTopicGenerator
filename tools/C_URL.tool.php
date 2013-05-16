@@ -12,7 +12,7 @@ class C_URL
     /**
      * Defines this application.
      */
-    const USERAGENT = 'Ultimation/1.0';
+    const USERAGENT = USER_AGENT;
 
     /**
      * Gets the contents of a URL
@@ -34,13 +34,13 @@ class C_URL
 
         // 2xx is successful everything else failed as far as we are concerned
         // so all none 2xx status codes will return false
-        ini_set('user_agent', 'Ultimation/1.0'); // for fopen
+        ini_set('user_agent', USER_AGENT); // for fopen
         if (function_exists('curl_init')) {
             $ch = curl_init();
 
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_HEADER, false);
-            curl_setopt($ch, CURLOPT_USERAGENT, 'Ultimation/1.0');
+            curl_setopt($ch, CURLOPT_USERAGENT, USER_AGENT);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
             $contents = curl_exec($ch);
