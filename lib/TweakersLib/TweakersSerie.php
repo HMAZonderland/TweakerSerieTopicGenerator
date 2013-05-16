@@ -298,7 +298,7 @@ class TweakersSerie
      */
     public function getLaboratory()
     {
-        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->laboratory));
+        return ArrayToString::getStringLineBreak($this->_imdb->laboratory);
     }
 
     /**
@@ -307,6 +307,6 @@ class TweakersSerie
      */
     public function getLanguagesAsString()
     {
-        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->language));
+        return ArrayToString::getStringLineBreak($this->_imdb->language);
     }
 }
