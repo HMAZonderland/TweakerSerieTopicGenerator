@@ -43,7 +43,10 @@ class SimpleXML
                 array_push($array, $var);
             }
         }
-        return $array[0];
 
+        if (array_key_exists(0, $array)) {
+            return $array[0];
+        }
+        return $array;
     }
 }
