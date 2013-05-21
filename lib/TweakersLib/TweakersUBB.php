@@ -62,6 +62,31 @@ class TweakersUBB
     }
 
     /**
+     * Creates a cell, this could be td/th
+     *
+     * @param $cell containing cell data
+     * @param $type th/td
+     *
+     * @return string
+     */
+    private function getCell($cell, $type)
+    {
+        $color = $this->tdBgColor;
+        if ($type == "th") {
+            $color = $this->thBgColor;
+        }
+
+        $str = "[" . $type . " bgcolor=#" . $color . " ";
+        foreach ($cell as $property => $value) {
+            if ($property != 'data') {
+                $str .= $property . "=" . $value . " ";
+            }
+        }
+        $str .= "]" . $cell['data'] . "[/" . $type . "]";
+        return $str;
+    }
+
+    /**
      * Creates a td cell
      *
      * @param $cell
@@ -70,14 +95,7 @@ class TweakersUBB
      */
     private function getTd($cell)
     {
-        $str = "[td bgcolor=#" . $this->tdBgColor . " ";
-        foreach ($cell as $property => $value) {
-            if ($property != 'data') {
-                $str .= $property . "=" . $value;
-            }
-        }
-        $str .= "]" . $cell['data'] . "[/td]";
-        return $str;
+        return $this->getCell($cell, "td");
     }
 
     /**
@@ -88,7 +106,6 @@ class TweakersUBB
      * To enable multiple cells create an array containing the cells
      *
      * @param array $cells
-     * @param int   $colspan
      *
      * @return string
      */
@@ -103,25 +120,31 @@ class TweakersUBB
     }
 
     /**
-     * Creates a table header
-     * $var['data'] contains the inner part of the cell.
-     * $var['other'] contains all the posible attributes
-     *
-     * @param     $cell
-     * @param int $colspan
+     * @param $cell
      *
      * @return string
      */
-    private function getThRow(array $cell)
+    private function getTh($cell)
+    {
+        return $this->getCell($cell, "th");
+    }
+
+    /**
+     * Creates a table header
+     * $var[]['data'] contains the inner part of the cell.
+     * $var[]['other'] contains all the posible attributes
+     *
+     * @param    array $cells
+     *
+     * @return string
+     */
+    private function getThRow(array $cells)
     {
         $str = "[tr]";
-        $str .= "[th bgcolor=#" . $this->thBgColor . " ";
-        foreach ($cell as $property => $value) {
-            if ($property != 'data') {
-                $str .= $property . "=" . $value;
-            }
+        foreach ($cells as $cell) {
+            $str .= $this->getTh($cell);
         }
-        $str .= "]" . $cell['data'] . "[/th][/tr]";
+        $str .= "[/tr]";
         return $str;
     }
 
@@ -160,7 +183,7 @@ class TweakersUBB
     {
         $str = '';
         if (strlen($bannerUrl) > 0) $str .= $this->getTdRow(array(self::createDataArray("[img title='" . $title . "']" . $bannerUrl . "[/img]")));
-        $str .= $this->getThRow(self::createDataArray($title));
+        $str .= $this->getThRow(array(self::createDataArray($title)));
         if (strlen($plot) > 0) $str .= $this->getTdRow(array(self::createDataArray($plot)));
 
         return $this->getTable($str);
@@ -177,7 +200,7 @@ class TweakersUBB
      */
     public function getDataBlock($title, array $blockData)
     {
-        $str = $this->getThRow(self::createDataArray($title, array("colspan" => 2)));
+        $str = $this->getThRow(array(self::createDataArray($title, array("colspan" => 2))));
         foreach ($blockData as $data => $var) {
             $str .= $this->getTdRow(array(self::createDataArray($data), self::createDataArray($var)));
         }
@@ -192,7 +215,7 @@ class TweakersUBB
      */
     public function getActorTable(SimpleXMLElement $actors)
     {
-        $str = $this->getThRow(self::createDataArray("Acteurs", array("colspan" => 2)));
+        $str = $this->getThRow(array(self::createDataArray("Acteurs", array("colspan" => 2))));
         foreach ($actors as $actor) {
 
             if (strlen($actor->Image) > 0) {
@@ -223,9 +246,68 @@ class TweakersUBB
      */
     public function getLinksTable($tvdbUrl, $imdbUrl)
     {
-        $str  = $this->getThRow(self::createDataArray("Links", array("colspan" => 2)));
+        $str  = $this->getThRow(array(self::createDataArray("Links", array("colspan" => 2))));
         $str .= $this->getTdRow(array(self::createDataArray("IMDb"), self::createDataArray($imdbUrl)));
         $str .= $this->getTdRow(array(self::createDataArray("TvDb"), self::createDataArray($tvdbUrl)));
+        return $this->getTable($str);
+    }
+
+    /**
+     * @param $episodes
+     */
+    public function getEpisodesIndex($seasons)
+    {
+        // [1][1] there is always a first episode of the first season
+        $cols = sizeof($seasons[1][1]);
+        $str = $this->getThRow(array(self::createDataArray("Afleveringen", array("colspan" => $cols))));
+        $str .= $this->getThRow(array(self::createDataArray("Hoover met de muis over het [img]http://icon.ultimation.nl/information.png[/img] icoon voor een omschrijving van de aflevering.", array("colspan" => $cols))));
+
+        foreach ($seasons as $season)
+        {
+            $header = array();
+            $rows = array();
+            $doRowspan = true;
+            foreach ($season as $episode)
+            {
+                $row = array();
+                foreach ($episode as $var => $data)
+                {
+                    $head = self::createDataArray("[b]" . $var . "[/b]", array("width" => 5, "bgcolor" => "#" . $this->thBgColor));
+                    if (!in_array($head, $header)) {
+                        array_push($header, $head);
+                    }
+
+                    if ($var == 'Is uitgezonden?') {
+                        array_push($row, self::createDataArray("[img]" . $data . "[/img]", array("width" => 1, "valign" => "top")));
+                    } elseif ($var == 'Seizoen' && $doRowspan) {
+                        $doRowspan = false;
+                        array_push($row, self::createDataArray($data, array("rowspan" => sizeof($season), "valign" => "top", "width" => 1)));
+                    } elseif ($var != 'Seizoen') {
+                        array_push($row, self::createDataArray($data, array("valign" => "top")));
+                    }
+                }
+                array_push($rows, $this->getTdRow($row));
+            }
+
+            $str .= $this->getTdRow($header);
+            foreach ($rows as $r) {
+                $str .= $r;
+            }
+
+
+            // var is header
+            //echo "<pre>";
+            //print_r($rows);
+            //print_r($str);
+            //echo "</pre>";
+            //die();
+
+        }
+
+        //echo "OUTPUT!<pre>";
+        //print_r($str);
+        //echo "</pre>";
+        //die();
         return $this->getTable($str);
     }
 }

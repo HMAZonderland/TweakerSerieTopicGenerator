@@ -325,20 +325,23 @@ class TweakersSerie
         foreach ($this->_tvdb->episodes as $episode) {
             // No need for the specials
             if ($episode->season_number > 0) {
+                $episodes[$episode->season_number][$episode->episode_number]['Seizoen'] = $episode->season_number;
                 $episodes[$episode->season_number][$episode->episode_number]['Aflevering'] = $episode->episode_number;
                 $episodes[$episode->season_number][$episode->episode_number]['Naam'] = $episode->episode_name;
-                $episodes[$episode->season_number][$episode->episode_number]['Omschrijving'] = $episode->overview;
-                $episodes[$episode->season_number][$episode->episode_number]['Uitzend datum'] = $episode->first_aired;
-                $episodes[$episode->season_number][$episode->episode_number]['icon'] = $this->isBroadcastedIcon($episode->first_aired);
+                if (!empty($episode->overview)) {
+                    $episodes[$episode->season_number][$episode->episode_number]['Naam'] = $episode->episode_name . "[img link=0 align=right title=\"" . $episode->overview . "\"]http://icon.ultimation.nl/information.png[/img]";
+                }
+                $episodes[$episode->season_number][$episode->episode_number]['Datum'] = $episode->first_aired;
+                $episodes[$episode->season_number][$episode->episode_number]['Is uitgezonden?'] = $this->isBroadcastedIcon($episode->first_aired);
 
             }
         }
 
-        echo "<pre>";
+        //echo "<pre>";
         //print_r($this->_tvdb->episodes);
-        print_r($episodes);
-        echo "</pre>";
-        die();
+        //print_r($episodes);
+        //echo "</pre>";
+        //die();
 
         return $episodes;
     }
