@@ -82,6 +82,7 @@ class TweakersUBB
                 $str .= $property . "=" . $value . " ";
             }
         }
+        $str = substr($str, 0, strlen($str) - 1);
         $str .= "]" . $cell['data'] . "[/" . $type . "]";
         return $str;
     }
