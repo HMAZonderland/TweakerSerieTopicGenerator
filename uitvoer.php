@@ -28,15 +28,17 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
     if (strlen($serie->getName()) > 0) {
 
        echo $tweakers->getSerieHeader($serie->getBanner(), $serie->getName(), $serie->getLongestPlot());
-       echo "<br /><br />";
+       echo "<br />";
+       echo $tweakers->getSummery($serie->getEpisodesData());
+       echo "<br />";
        echo $tweakers->getDataBlock("Algemene informatie", $serie->getGeneralInformation());
-       echo "<br /><br />";
+       echo "<br />";
        echo $tweakers->getDataBlock("Technische informatie", $serie->getTechnicalInformation());
-       echo "<br /><br />";
+       echo "<br />";
        echo $tweakers->getActorTable($serie->getActors());
-       echo "<br /><br />";
+       echo "<br />";
        echo $tweakers->getLinksTable($serie->getTvDbUrl(), $serie->getIMDbUrl());
-       echo "<br /><br />";
+       echo "<br />";
        echo $tweakers->getEpisodesIndex($serie->getEpisodesData());
 
     } else {

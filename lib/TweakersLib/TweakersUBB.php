@@ -150,6 +150,44 @@ class TweakersUBB
     }
 
     /**
+     * Adds an anchor
+     *
+     * @param $text
+     * @param $anchor
+     *
+     * @return string
+     */
+    private function addAnchor($text)
+    {
+        $label = str_replace(' ', '', $text);
+        return "[anchor=an_" . $label . "]" . $text ."[/anchor]";
+    }
+
+    /**
+     * Enables linking to anchors
+     *
+     * @param $text
+     * @param $label
+     *
+     * @return string
+     */
+    private function addJump($text, $tip, $label = null)
+    {
+        if ($label == null) $label = str_replace(' ', '', $text);
+        return "[jump=an_" . $label . ", " . $tip . "] " . $text . " [/jump]";
+    }
+
+    /**
+     * @param int $cols
+     *
+     * @return string
+     */
+    private function addBackToSummeryLink($cols = 2)
+    {
+        return $this->getTdRow(array(self::createDataArray("[right]" . $this->addJump("Naar de inhoudsopgave", "Klik hier om terug te gaan naar de inhoudsopgave", "Inhoudsopgave") . "[/right]", array("colspan" => $cols, "bgcolor" => "#" .$this->thBgColor, "fontsize" => 9))));
+    }
+
+    /**
      * Creates a TD array object.
      * $var['data'] contains the inner part of the cell.
      * $var['other'] contains all the posible attributes
@@ -201,12 +239,32 @@ class TweakersUBB
      */
     public function getDataBlock($title, array $blockData)
     {
-        $str = $this->getThRow(array(self::createDataArray($title, array("colspan" => 2))));
+        $str = $this->getThRow(array(self::createDataArray($this->addAnchor($title), array("colspan" => 2))));
         foreach ($blockData as $data => $var) {
             $str .= $this->getTdRow(array(self::createDataArray($data), self::createDataArray($var)));
         }
-
+        $str .= $this->addBackToSummeryLink();
         return $this->getTable($str);
+    }
+
+    /**
+     * @param $seasons
+     *
+     * @return string
+     */
+    public function getSummery($seasons)
+    {
+       $seasons = sizeof($seasons) + 1;
+       $str  = $this->getThRow(array(self::createDataArray($this->addAnchor("Inhoudsopgave"))));
+       $str .= $this->getTdRow(array(self::createDataArray($this->addJump("Algemene informatie", "Lees meer over algemene informatie."))));
+       $str .= $this->getTdRow(array(self::createDataArray($this->addJump("Technische informatie", "Lees meer over de technische aspecten van deze serie."))));
+       $str .= $this->getTdRow(array(self::createDataArray($this->addJump("Acteurs", "Zie welke acteurs in deze serie spelen."))));
+       $str .= $this->getTdRow(array(self::createDataArray($this->addJump("Links", "Diverse weblinks."))));
+       $str .= $this->getTdRow(array(self::createDataArray($this->addJump("Afleveringen", "Bekijk de afleveringen"))));
+       for ($i = 1; $i != $seasons; $i++) {
+           $str .= $this->getTdRow(array(self::createDataArray($this->addJump("[img]http://icon.ultimation.nl/top_right.png[/img] Seizoen " . $i, "Bekijk de afleveringen van seizoen " . $i, $i))));
+       }
+       return $this->getTable($str);
     }
 
     /**
@@ -216,7 +274,7 @@ class TweakersUBB
      */
     public function getActorTable(SimpleXMLElement $actors)
     {
-        $str = $this->getThRow(array(self::createDataArray("Acteurs", array("colspan" => 2))));
+        $str = $this->getThRow(array(self::createDataArray($this->addAnchor("Acteurs"), array("colspan" => 2))));
         foreach ($actors as $actor) {
 
             if (strlen($actor->Image) > 0) {
@@ -234,6 +292,7 @@ class TweakersUBB
                 $str .= self::createDataArray($actor->Role . " gespeeld door " . $actor->Name, array("colspan" => 2));
             }
         }
+        $str .= $this->addBackToSummeryLink();
         return $this->getTable($str);
     }
 
@@ -247,9 +306,10 @@ class TweakersUBB
      */
     public function getLinksTable($tvdbUrl, $imdbUrl)
     {
-        $str  = $this->getThRow(array(self::createDataArray("Links", array("colspan" => 2))));
+        $str  = $this->getThRow(array(self::createDataArray($this->addAnchor("Links"), array("colspan" => 2))));
         $str .= $this->getTdRow(array(self::createDataArray("IMDb"), self::createDataArray($imdbUrl)));
         $str .= $this->getTdRow(array(self::createDataArray("TvDb"), self::createDataArray($tvdbUrl)));
+        $str .= $this->addBackToSummeryLink();
         return $this->getTable($str);
     }
 
@@ -260,7 +320,7 @@ class TweakersUBB
     {
         // [1][1] there is always a first episode of the first season
         $cols = sizeof($seasons[1][1]);
-        $str = $this->getThRow(array(self::createDataArray("Afleveringen", array("colspan" => $cols))));
+        $str = $this->getThRow(array(self::createDataArray($this->addAnchor("Afleveringen"), array("colspan" => $cols))));
         $str .= $this->getThRow(array(self::createDataArray("Hoover met de muis over het [img]http://icon.ultimation.nl/information.png[/img] icoon voor een omschrijving van de aflevering.", array("colspan" => $cols))));
 
         foreach ($seasons as $season)
@@ -282,7 +342,7 @@ class TweakersUBB
                         array_push($row, self::createDataArray("[img]" . $data . "[/img]", array("width" => 1, "valign" => "top")));
                     } elseif ($var == 'Seizoen' && $doRowspan) {
                         $doRowspan = false;
-                        array_push($row, self::createDataArray($data, array("rowspan" => sizeof($season), "valign" => "top", "width" => 1)));
+                        array_push($row, self::createDataArray($this->addAnchor($data), array("rowspan" => sizeof($season), "valign" => "top", "width" => 1)));
                     } elseif ($var != 'Seizoen') {
                         array_push($row, self::createDataArray($data, array("valign" => "top")));
                     }
@@ -309,6 +369,7 @@ class TweakersUBB
         //print_r($str);
         //echo "</pre>";
         //die();
+        $str .= $this->addBackToSummeryLink(5);
         return $this->getTable($str);
     }
 }
