@@ -14,7 +14,6 @@ class TweakersSerie
      * @var TvDbShow
      */
     private $_tvdb;
-
     /**
      * IMDbShow var
      * @var IMDbShow
@@ -73,33 +72,6 @@ class TweakersSerie
     }
 
     /**
-     * Returns first date aired
-     * @return string
-     */
-    private function getFirstAirDate()
-    {
-        return $this->_tvdb->first_aired;
-    }
-
-    /**
-     * Returns the network making the serie
-     * @return string
-     */
-    private function getNetwork()
-    {
-        return $this->_tvdb->network;
-    }
-
-    /**
-     * Returns the serie status
-     * @return string
-     */
-    private function getStatus()
-    {
-        return $this->_tvdb->status;
-    }
-
-    /**
      * Returns an array with all the actors playing in the serie
      * @return array
      */
@@ -127,56 +99,40 @@ class TweakersSerie
      */
     public function getGeneralInformation()
     {
-        $genres             = $this->getGenresAsString();
-        $imdbRatings        = $this->_imdb->rating;
-        $imdbVotes          = $this->_imdb->rating_count;
-        $tvdbRatings        = $this->_tvdb->rating;
-        $tvdbVotes          = $this->_tvdb->rating_count;
-        $status             = $this->getStatus();
-        $network            = $this->getNetwork();
-        $first_air_date     = $this->getFirstAirDate();
-        $filming_locations  = $this->getFilmingLocations();
-        $runtime            = $this->getRuntime();
-        $languages          = $this->getLanguagesAsString();
+        $genres = $this->getGenresAsString();
+        $imdbRatings = $this->_imdb->rating;
+        $imdbVotes = $this->_imdb->rating_count;
+        $tvdbRatings = $this->_tvdb->rating;
+        $tvdbVotes = $this->_tvdb->rating_count;
+        $status = $this->getStatus();
+        $network = $this->getNetwork();
+        $first_air_date = $this->getFirstAirDate();
+        $filming_locations = $this->getFilmingLocations();
+        $runtime = $this->getRuntime();
+        $languages = $this->getLanguagesAsString();
 
         $array = array();
 
-        if (strlen($network) > 0)           $array['Uitgever'] = $network;
-        if (strlen($genres) > 0)            $array['Genre'] = $genres;
-        if (strlen($first_air_date) > 0)    $array['Begonnen'] = $first_air_date;
-        if (strlen($imdbRatings) > 0)       $array['IMDb cijfer'] = $imdbRatings . " (" . $imdbVotes . " stemmen)";
-        if (strlen($tvdbRatings) > 0)       $array['TvDb cijfer'] = $tvdbRatings . " (" . $tvdbVotes . " stemmen)";
-        if (strlen($status) > 0)            $array['Status'] = $status;
+        if (strlen($network) > 0) $array['Uitgever'] = $network;
+        if (strlen($genres) > 0) $array['Genre'] = $genres;
+        if (strlen($first_air_date) > 0) $array['Begonnen'] = $first_air_date;
+        if (strlen($imdbRatings) > 0) $array['IMDb cijfer'] = $imdbRatings . " (" . $imdbVotes . " stemmen)";
+        if (strlen($tvdbRatings) > 0) $array['TvDb cijfer'] = $tvdbRatings . " (" . $tvdbVotes . " stemmen)";
+        if (strlen($status) > 0) $array['Status'] = $status;
         if (strlen($filming_locations) > 0) $array['Film locaties'] = $filming_locations;
-        if (strlen($runtime) > 0)           $array['Speeltijd'] = $runtime;
-        if (strlen($languages) > 0)         $array['Uitgebracht in talen'] = $languages;
+        if (strlen($runtime) > 0) $array['Speeltijd'] = $runtime;
+        if (strlen($languages) > 0) $array['Uitgebracht in talen'] = $languages;
 
         return $array;
     }
 
     /**
-     * Collects more technical information about the serie and returns this in an array
-     * @return array
+     * Returns all the series genres in 1 string comma seperated
+     * @return string
      */
-    public function getTechnicalInformation()
+    private function getGenresAsString()
     {
-        $ratio                      = $this->getRatio();
-        $cinematographic_process    = $this->getCinematographicProcessAsString();
-        $cameras                    = $this->getCameraAsString();
-        $printed_film_format        = $this->getPrintedFilmFormat();
-        $film_negativ_format        = $this->getFilmNegativeFormat();
-        $laboratory                 = $this->getLaboratory();
-
-        $array = array();
-
-        if (strlen($ratio) > 0)                     $array['Ratio'] = $ratio;
-        if (strlen($cinematographic_process) > 0)   $array['Cinematografische proces'] = $cinematographic_process;
-        if (strlen($cameras) > 0)                   $array['Camera\'s'] = $cameras;
-        if (strlen($printed_film_format) > 0 )      $array['Film formaat'] = $printed_film_format;
-        if (strlen($film_negativ_format) > 0)       $array['Negatief'] = $film_negativ_format;
-        if (strlen($laboratory) > 0)                $array['Laboratorium'] = $laboratory;
-
-        return $array;
+        return ArrayToString::getStringLineBreakArray($this->getGenres());
     }
 
     /**
@@ -190,11 +146,22 @@ class TweakersSerie
         $tvdbGenres = $this->_tvdb->genre;
         $imdbGenres = SimpleXML::SimpleXMLElementToArray($this->_imdb->genres);
 
-        foreach ($tvdbGenres as $tvdbGenre) {
-            array_push($genres, $tvdbGenre);
+        if (sizeof($tvdbGenres) > 0) {
+            foreach ($tvdbGenres as $tvdbGenre) {
+                array_push($genres, $tvdbGenre);
+            }
         }
 
-        foreach ($imdbGenres as $imdbGenre) {
+        if (is_array($imdbGenres)){
+            if (sizeof($imdbGenres) > 0) {
+                foreach ($imdbGenres as $imdbGenre) {
+                    if (($key = array_search($imdbGenre, $genres)) == null) {
+                        array_push($genres, $imdbGenre);
+                    }
+                }
+            }
+        } else {
+            $imdbGenre = $imdbGenres;
             if (($key = array_search($imdbGenre, $genres)) == null) {
                 array_push($genres, $imdbGenre);
             }
@@ -204,12 +171,30 @@ class TweakersSerie
     }
 
     /**
-     * Returns all the series genres in 1 string comma seperated
+     * Returns the serie status
      * @return string
      */
-    private function getGenresAsString()
+    private function getStatus()
     {
-        return ArrayToString::getStringLineBreakArray($this->getGenres());
+        return $this->_tvdb->status;
+    }
+
+    /**
+     * Returns the network making the serie
+     * @return string
+     */
+    private function getNetwork()
+    {
+        return $this->_tvdb->network;
+    }
+
+    /**
+     * Returns first date aired
+     * @return string
+     */
+    private function getFirstAirDate()
+    {
+        return $this->_tvdb->first_aired;
     }
 
     /**
@@ -231,21 +216,37 @@ class TweakersSerie
     }
 
     /**
-     * Returns the link to the TVDb
-     * @return string
+     * Returns all languages this serie is brought out with
+     * @return SimpleXMLElement[]|string
      */
-    public function getTvDbUrl()
+    private function getLanguagesAsString()
     {
-        return $this->_tvdb->tvdb_url;
+        return ArrayToString::getStringLineBreak($this->_imdb->language);
     }
 
     /**
-     * Returns the link to IMDb
-     * @return SimpleXMLElement[]
+     * Collects more technical information about the serie and returns this in an array
+     * @return array
      */
-    public function getIMDbUrl()
+    public function getTechnicalInformation()
     {
-        return $this->_imdb->imdb_url;
+        $ratio = $this->getRatio();
+        $cinematographic_process = $this->getCinematographicProcessAsString();
+        $cameras = $this->getCameraAsString();
+        $printed_film_format = $this->getPrintedFilmFormat();
+        $film_negativ_format = $this->getFilmNegativeFormat();
+        $laboratory = $this->getLaboratory();
+
+        $array = array();
+
+        if (strlen($ratio) > 0) $array['Ratio'] = $ratio;
+        if (strlen($cinematographic_process) > 0) $array['Cinematografische proces'] = $cinematographic_process;
+        if (strlen($cameras) > 0) $array['Camera\'s'] = $cameras;
+        if (strlen($printed_film_format) > 0) $array['Film formaat'] = $printed_film_format;
+        if (strlen($film_negativ_format) > 0) $array['Negatief'] = $film_negativ_format;
+        if (strlen($laboratory) > 0) $array['Laboratorium'] = $laboratory;
+
+        return $array;
     }
 
     /**
@@ -303,12 +304,21 @@ class TweakersSerie
     }
 
     /**
-     * Returns all languages this serie is brought out with
-     * @return SimpleXMLElement[]|string
+     * Returns the link to the TVDb
+     * @return string
      */
-    private function getLanguagesAsString()
+    public function getTvDbUrl()
     {
-        return ArrayToString::getStringLineBreak($this->_imdb->language);
+        return $this->_tvdb->tvdb_url;
+    }
+
+    /**
+     * Returns the link to IMDb
+     * @return SimpleXMLElement[]
+     */
+    public function getIMDbUrl()
+    {
+        return $this->_imdb->imdb_url;
     }
 
     /**
@@ -347,6 +357,21 @@ class TweakersSerie
     }
 
     /**
+     * @param $broadcastDate
+     *
+     * @return string
+     */
+    private function isBroadcastedIcon($broadcastDate)
+    {
+        if (strlen($broadcastDate) > 0) {
+            if ($this->episodeBroadcasted($broadcastDate)) {
+                return ICON_URL . 'accept.png';
+            }
+        }
+        return ICON_URL . 'cancel.png';
+    }
+
+    /**
      * Checks if a date is in the past
      *
      * @param $broadcastDate
@@ -356,18 +381,5 @@ class TweakersSerie
     private function episodeBroadcasted($broadcastDate)
     {
         return ((strtotime($broadcastDate) < time()));
-    }
-
-    /**
-     * @param $broadcastDate
-     *
-     * @return string
-     */
-    private function isBroadcastedIcon($broadcastDate)
-    {
-         if ($this->episodeBroadcasted($broadcastDate)) {
-             return ICON_URL .'accept.png';
-         }
-        return ICON_URL . 'cancel.png';
     }
 }

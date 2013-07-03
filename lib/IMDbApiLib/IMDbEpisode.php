@@ -7,7 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class IMDbEpisode {
+class IMDbEpisode
+{
 
     /**
      * Season number
@@ -30,9 +31,9 @@ class IMDbEpisode {
     public function __construct(SimpleXMLElement $data = null)
     {
         if ($data != null) {
-            $this->title    =   (string) $data->title;
-            $this->season   =   (int) $data->season;
-            $this->episode  =   (int) $data->episode;
+            $this->title = (string)$data->title;
+            $this->season = (int)$data->season;
+            $this->episode = (int)$data->episode;
         }
     }
 }

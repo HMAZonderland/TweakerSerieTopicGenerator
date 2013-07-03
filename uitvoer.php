@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Created by JetBrains PhpStorm.
@@ -10,6 +11,16 @@ error_reporting(-1);
 
 // Includes
 require_once dirname(__FILE__) . '/config.php';
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tweakers.net Serie Topic Generator</title>
+</head>
+<body>
+<?php
 
 if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
@@ -27,19 +38,19 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
 
     if (strlen($serie->getName()) > 0) {
 
-       echo $tweakers->getSerieHeader($serie->getBanner(), $serie->getName(), $serie->getLongestPlot());
-       echo "<br />";
-       echo $tweakers->getSummery($serie->getEpisodesData());
-       echo "<br />";
-       echo $tweakers->getDataBlock("Algemene informatie", $serie->getGeneralInformation());
-       echo "<br />";
-       echo $tweakers->getDataBlock("Technische informatie", $serie->getTechnicalInformation());
-       echo "<br />";
-       echo $tweakers->getActorTable($serie->getActors());
-       echo "<br />";
-       echo $tweakers->getLinksTable($serie->getTvDbUrl(), $serie->getIMDbUrl());
-       echo "<br />";
-       echo $tweakers->getEpisodesIndex($serie->getEpisodesData());
+        echo $tweakers->getSerieHeader($serie->getBanner(), $serie->getName(), $serie->getLongestPlot());
+        echo "<br />";
+        echo $tweakers->getSummery($serie->getEpisodesData());
+        echo "<br />";
+        echo $tweakers->getDataBlock("Algemene informatie", $serie->getGeneralInformation());
+        echo "<br />";
+        echo $tweakers->getDataBlock("Technische informatie", $serie->getTechnicalInformation());
+        echo "<br />";
+        echo $tweakers->getActorTable($serie->getActors());
+        echo "<br />";
+        echo $tweakers->getLinksTable($serie->getTvDbUrl(), $serie->getIMDbUrl());
+        echo "<br />";
+        echo $tweakers->getEpisodesIndex($serie->getEpisodesData());
 
     } else {
         echo 'Invalide tvDbId. Geen serie gevonden.';

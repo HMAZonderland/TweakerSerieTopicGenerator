@@ -7,7 +7,8 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class IMDbShow {
+class IMDbShow
+{
 
     /**
      * IMDb Id of the serie
@@ -154,30 +155,30 @@ class IMDbShow {
     public function __construct(SimpleXMLElement $data = null)
     {
         if ($data != null) {
-            $this->imdb_id                  =       (string) $data->imdb_id;
-            $this->imdb_url                 =       (string) $data->imdb_url;
-            $this->title                    =       (string) $data->title;
-            $this->plot                     =       (string) $data->plot;
-            $this->plot_simple              =       (string) $data->plot_simple;
-            $this->rating                   =       (double) $data->rating;
-            $this->rating_count             =       (int) $data->rating_count;
-            $this->year                     =       (string) $data->year;
-            $this->genres                   =       (array) $data->genres;
-            $this->rated                    =       (string) $data->rated;
+            $this->imdb_id = (string)$data->imdb_id;
+            $this->imdb_url = (string)$data->imdb_url;
+            $this->title = (string)$data->title;
+            $this->plot = (string)$data->plot;
+            $this->plot_simple = (string)$data->plot_simple;
+            $this->rating = (double)$data->rating;
+            $this->rating_count = (int)$data->rating_count;
+            $this->year = (string)$data->year;
+            $this->genres = (array)$data->genres;
+            $this->rated = (string)$data->rated;
             //$this->episodes                 =       $data->episodes;
-            $this->actors                   =       (array) $data->actors;
-            $this->type                     =       (string) $data->type;
-            $this->poster                   =       (string) $data->poster;
-            $this->language                 =       (array) $data->language;
-            $this->country                  =       (array) $data->country;
-            $this->aspect_ratio             =       (array) $data->technical->aspect_ratio;
-            $this->cinematographic_process  =       (array) $data->technical->cinematographic_process;
-            $this->camera                   =       (array) $data->technical->camera;
-            $this->printed_film_format      =       (array) $data->technical->printed_film_format;
-            $this->film_negative_format     =       (array) $data->technical->film_negative_format;
-            $this->filming_locations        =       (string) $data->filming_locations;
-            $this->runtime                  =       (string) $data->runtime->item;
-            $this->laboratory               =       (string) $data->technical->laboratory;
+            $this->actors = (array)$data->actors;
+            $this->type = (string)$data->type;
+            $this->poster = (string)$data->poster;
+            $this->language = (array)$data->language;
+            $this->country = (array)$data->country;
+            $this->aspect_ratio = (array)$data->technical->aspect_ratio;
+            $this->cinematographic_process = (array)$data->technical->cinematographic_process;
+            $this->camera = (array)$data->technical->camera;
+            $this->printed_film_format = (array)$data->technical->printed_film_format;
+            $this->film_negative_format = (array)$data->technical->film_negative_format;
+            $this->filming_locations = (string)$data->filming_locations;
+            $this->runtime = (string)$data->runtime->item;
+            $this->laboratory = (string)$data->technical->laboratory;
         }
 
         return $this;

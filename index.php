@@ -8,13 +8,14 @@ require_once dirname(__FILE__) . '/config.php';
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Tweakers.net Serie Topic Generator</title>
     <link href="css/formatting.css" rel="stylesheet">
-    <link href="less/metro.less" rel="stylesheet/less" type="text/css" />
-    <link href="less/metroblog.less"  rel="stylesheet/less" type="text/css"/>
+    <link href="less/metro.less" rel="stylesheet/less" type="text/css"/>
+    <link href="less/metroblog.less" rel="stylesheet/less" type="text/css"/>
     <script src="scripts/less-1.2.1.min.js" type="text/javascript"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.7.2.min.js"></script>
-    <script src="scripts/jquery.metro.js" type="text/javascript" ></script>
+    <script src="scripts/jquery.metro.js" type="text/javascript"></script>
     <script src="scripts/jscolor/jscolor.js" type="text/javascript"></script>
 </head>
 <body>
@@ -48,10 +49,11 @@ if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
         echo "</section>";
     }
 } else {
-?>
+    ?>
     <section>
         <h2 class="accent">Voer een titel in</h2>
-        <br />
+        <br/>
+
         <form name="searchForm" method="post">
             <table>
                 <tr>
@@ -72,7 +74,8 @@ if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
                 </tr>
             </table>
             <div class="inputwrap">
-                <p><input type="text" name="query" size="46" /><input type="submit" name="search" value="Zoek serie!" /></p>
+                <p><input type="text" name="query" size="46"/><input type="submit" name="search" value="Zoek serie!"/>
+                </p>
             </div>
         </form>
     </section>
