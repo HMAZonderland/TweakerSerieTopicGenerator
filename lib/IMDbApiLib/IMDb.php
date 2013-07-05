@@ -13,13 +13,13 @@ class IMDb
     /**
      * Where to send all the requests to.
      */
-    const IMDBAPI = 'http://imdbapi.org/';
+    const IMDBAPI = 'http://mymovieapi.com/';
 
     /**
      * Contains all the data fetched in the request
      * @var SimpleXML file
      */
-    private $_IMDBXML;
+    private $_IMDBJSON;
 
     /**
      * Fetches data from the IMDBAPI.org website, creates XML file and stores the information
@@ -28,13 +28,12 @@ class IMDb
      */
     public function getSerieById($imDbId)
     {
-        $url = self::IMDBAPI . '?id=' . $imDbId . '&type=xml&plot=full&episode=1&lang=en-US&aka=simple&release=simple&business=1&tech=1';
-        $this->_IMDBXML = SimpleXML::get_xml_url_contents($url);
+        $url = self::IMDBAPI . '?id=' . $imDbId . '&type=json&plot=full&episode=1&lang=en-US&aka=simple&release=simple&business=1&tech=1';
+        $this->_IMDBJSON = json_decode(C_URL::get_url_contents($url), true);
+        $show = new IMDbShow($this->_IMDBJSON);
 
-        $show = new IMDbShow($this->_IMDBXML);
-
-        if (sizeof($this->_IMDBXML->episodes) > 0) {
-            foreach ($this->_IMDBXML->episodes->item as $ep) {
+        if (sizeof($this->_IMDBJSON['episodes']) > 0) {
+            foreach ($this->_IMDBJSON['episodes'] as $ep) {
                 $show->episodes[] = new IMDbEpisode($ep);
             }
         }

@@ -21,15 +21,22 @@ class TweakersSerie
     private $_imdb;
 
     /**
+     * Trakt show var
+     * @var
+     */
+    private $_trakt;
+
+    /**
      * Sets up the object
      *
      * @param TvDbShow $tvdb
      * @param IMDbShow $imdb
      */
-    public function __construct(TvDbShow $tvdb, IMDbShow $imdb)
+    public function __construct(TvDbShow $tvdb, IMDbShow $imdb, traktShow $trakt)
     {
         $this->_tvdb = $tvdb;
         $this->_imdb = $imdb;
+        $this->_trakt = $trakt;
     }
 
     /**
@@ -43,11 +50,16 @@ class TweakersSerie
     {
         $tvdb = new TVDb();
         $imdb = new IMDb();
+        $trakt = new Trakt(TRAKT_API_KEY);
 
         $tvdbShow = $tvdb->get_tv_show_by_id($tvdbId);
         $imDbShow = $imdb->getSerieById($tvdbShow->IMDB_id);
+        $traktShow = new traktShow($trakt->showSummary($tvdbId, 'extend'));
 
-        return new TweakersSerie($tvdbShow, $imDbShow);
+       // Debug::p($traktShow);
+      //  die();
+
+        return new TweakersSerie($tvdbShow, $imDbShow, $traktShow);
     }
 
     /**
@@ -94,6 +106,14 @@ class TweakersSerie
     }
 
     /**
+     * @return country
+     */
+    public function getCountry()
+    {
+        return $this->_trakt->country;
+    }
+
+    /**
      * Collects all general information about the serie and returns this in an array
      * @return array
      */
@@ -104,24 +124,32 @@ class TweakersSerie
         $imdbVotes = $this->_imdb->rating_count;
         $tvdbRatings = $this->_tvdb->rating;
         $tvdbVotes = $this->_tvdb->rating_count;
-        $status = $this->getStatus();
-        $network = $this->getNetwork();
-        $first_air_date = $this->getFirstAirDate();
-        $filming_locations = $this->getFilmingLocations();
+        $traktRatings = $this->_trakt->ratings['percentage'];
+        $traktVotes = $this->_trakt->ratings['votes'];
+        $traktViewers = $this->_trakt->stats['watchers'];
+        $traktPlays = $this->_trakt->stats['plays'];
+        $status = $this->_tvdb->status;
+        $network = $this->_tvdb->network;
+        $first_air_date = $this->_tvdb->first_aired;
+        $filming_locations = $this->_imdb->filming_locations;
         $runtime = $this->getRuntime();
         $languages = $this->getLanguagesAsString();
+        $country = $this->getCountry();
 
         $array = array();
 
         if (strlen($network) > 0) $array['Uitgever'] = $network;
         if (strlen($genres) > 0) $array['Genre'] = $genres;
         if (strlen($first_air_date) > 0) $array['Begonnen'] = $first_air_date;
-        if (strlen($imdbRatings) > 0) $array['IMDb cijfer'] = $imdbRatings . " (" . $imdbVotes . " stemmen)";
-        if (strlen($tvdbRatings) > 0) $array['TvDb cijfer'] = $tvdbRatings . " (" . $tvdbVotes . " stemmen)";
+        if (strlen($imdbRatings) > 0) $array['[img]http://serie.ultimation.nl/images/IMDB-logo.png[/img] IMDb cijfer'] = $imdbRatings . " (" . $imdbVotes . " stemmen)";
+        if (strlen($tvdbRatings) > 0) $array['[img]http://serie.ultimation.nl/images/tvdb_icon.png[/img] TvDb cijfer'] = $tvdbRatings . " (" . $tvdbVotes . " stemmen)";
+        if (strlen($traktRatings) > 0) $array['[img]http://serie.ultimation.nl/images/trakt.gif[/img] Trakt percentage'] = $traktRatings . "% (" . $traktVotes . " stemmen)";
+        if (strlen($traktViewers) > 0) $array['[img]http://serie.ultimation.nl/images/trakt.gif[/img] Kijkers op trakt'] = $traktViewers . " die gezamelijk " . $traktPlays . "x gekeken hebben";
         if (strlen($status) > 0) $array['Status'] = $status;
         if (strlen($filming_locations) > 0) $array['Film locaties'] = $filming_locations;
         if (strlen($runtime) > 0) $array['Speeltijd'] = $runtime;
         if (strlen($languages) > 0) $array['Uitgebracht in talen'] = $languages;
+        if (strlen($country) > 0) $array['Land(en)'] = $country;
 
         return $array;
     }
@@ -144,7 +172,7 @@ class TweakersSerie
         $genres = array();
 
         $tvdbGenres = $this->_tvdb->genre;
-        $imdbGenres = SimpleXML::SimpleXMLElementToArray($this->_imdb->genres);
+        $imdbGenres = $this->_imdb->genres;
 
         if (sizeof($tvdbGenres) > 0) {
             foreach ($tvdbGenres as $tvdbGenre) {
@@ -171,53 +199,17 @@ class TweakersSerie
     }
 
     /**
-     * Returns the serie status
-     * @return string
-     */
-    private function getStatus()
-    {
-        return $this->_tvdb->status;
-    }
-
-    /**
-     * Returns the network making the serie
-     * @return string
-     */
-    private function getNetwork()
-    {
-        return $this->_tvdb->network;
-    }
-
-    /**
-     * Returns first date aired
-     * @return string
-     */
-    private function getFirstAirDate()
-    {
-        return $this->_tvdb->first_aired;
-    }
-
-    /**
-     * Returns the filming locations
-     * @return mixed
-     */
-    private function getFilmingLocations()
-    {
-        return $this->_imdb->filming_locations;
-    }
-
-    /**
      * Returns the runtime of an episode
      * @return mixed
      */
     private function getRuntime()
     {
-        return $this->_imdb->runtime;
+        return ArrayToString::getStringLineBreak($this->_imdb->runtime);
     }
 
     /**
      * Returns all languages this serie is brought out with
-     * @return SimpleXMLElement[]|string
+     * @return string
      */
     private function getLanguagesAsString()
     {
@@ -230,95 +222,15 @@ class TweakersSerie
      */
     public function getTechnicalInformation()
     {
-        $ratio = $this->getRatio();
-        $cinematographic_process = $this->getCinematographicProcessAsString();
-        $cameras = $this->getCameraAsString();
-        $printed_film_format = $this->getPrintedFilmFormat();
-        $film_negativ_format = $this->getFilmNegativeFormat();
-        $laboratory = $this->getLaboratory();
-
         $array = array();
 
-        if (strlen($ratio) > 0) $array['Ratio'] = $ratio;
-        if (strlen($cinematographic_process) > 0) $array['Cinematografische proces'] = $cinematographic_process;
-        if (strlen($cameras) > 0) $array['Camera\'s'] = $cameras;
-        if (strlen($printed_film_format) > 0) $array['Film formaat'] = $printed_film_format;
-        if (strlen($film_negativ_format) > 0) $array['Negatief'] = $film_negativ_format;
-        if (strlen($laboratory) > 0) $array['Laboratorium'] = $laboratory;
+        foreach ($this->_imdb->technical as $field => $value) {
+            $field = str_replace("_", " ", $field);
+            $field = ucfirst($field);
+            $array[$field] = ArrayToString::getStringLineBreak($value);
+        }
 
         return $array;
-    }
-
-    /**
-     * Returns the ratio used
-     * @return mixed
-     */
-    private function getRatio()
-    {
-        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->aspect_ratio));
-    }
-
-    /**
-     * Returns the cinematographic process
-     * @return string
-     */
-    private function getCinematographicProcessAsString()
-    {
-        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->cinematographic_process));
-    }
-
-    /**
-     * Returns all camera's used in a string
-     * @return string
-     */
-    private function getCameraAsString()
-    {
-        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->camera));
-    }
-
-    /**
-     * Returns which film format the serie is produced on
-     * @return mixed
-     */
-    private function getPrintedFilmFormat()
-    {
-        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->printed_film_format));
-    }
-
-    /**
-     * Returns which negativ the film is printed on
-     * @return SimpleXMLElement[]|string
-     */
-    private function getFilmNegativeFormat()
-    {
-        return ArrayToString::getStringLineBreak(SimpleXML::SimpleXMLElementToArray($this->_imdb->film_negative_format));
-    }
-
-    /**
-     * Returns laboratories used for the series
-     * @return SimpleXMLElement[]|string
-     */
-    private function getLaboratory()
-    {
-        return ArrayToString::getStringLineBreak($this->_imdb->laboratory);
-    }
-
-    /**
-     * Returns the link to the TVDb
-     * @return string
-     */
-    public function getTvDbUrl()
-    {
-        return $this->_tvdb->tvdb_url;
-    }
-
-    /**
-     * Returns the link to IMDb
-     * @return SimpleXMLElement[]
-     */
-    public function getIMDbUrl()
-    {
-        return $this->_imdb->imdb_url;
     }
 
     /**
@@ -331,19 +243,37 @@ class TweakersSerie
         // Optimized array to process in the UBB code
         $episodes = array();
 
+        // reverse the trakt array
+        $trakt_data = array_reverse($this->_trakt->seasons);
+       // Debug::p($trakt_data);
+
+        //Debug::p($this->_tvdb->episodes);
+        //Debug::p($this->_trakt->seasons);
+
         // I know the TvDb offers more detailed information about the episode than IMDb does, so we go for that array.
         foreach ($this->_tvdb->episodes as $episode) {
             // No need for the specials
             if ($episode->season_number > 0) {
-                $episodes[$episode->season_number][$episode->episode_number]['Seizoen'] = $episode->season_number;
-                $episodes[$episode->season_number][$episode->episode_number]['Aflevering'] = $episode->episode_number;
+
+                // extract the trakt data
+                $trakt_ep = $episode->episode_number - 1;
+                $trakt_se = $episode->season_number - 1;
+                $trakt_ratings = $trakt_data[$trakt_se]['episodes'][$trakt_ep]['ratings'];
+
+                //Debug::s('trakt: ' . $trakt_se . ' ' . $trakt_ep);
+                //Debug::s('tvdb: ' . $episode->season_number . ' ' . $episode->episode_number);
+
+                //Debug::p($trakt_ratings);
+
+                $episodes[$episode->season_number][$episode->episode_number]['S'] = $episode->season_number;
+                $episodes[$episode->season_number][$episode->episode_number]['EP'] = $episode->episode_number;
                 $episodes[$episode->season_number][$episode->episode_number]['Naam'] = $episode->episode_name;
                 if (!empty($episode->overview)) {
                     $episodes[$episode->season_number][$episode->episode_number]['Naam'] = $episode->episode_name . "[img link=0 align=right title=\"" . $episode->overview . "\"]http://icon.ultimation.nl/information.png[/img]";
                 }
                 $episodes[$episode->season_number][$episode->episode_number]['Datum'] = $episode->first_aired;
-                $episodes[$episode->season_number][$episode->episode_number]['Is uitgezonden?'] = $this->isBroadcastedIcon($episode->first_aired);
-
+                $episodes[$episode->season_number][$episode->episode_number]['Tv?'] = "[img link=0 ]" . $this->isBroadcastedIcon($episode->first_aired) . "[/img]";
+                $episodes[$episode->season_number][$episode->episode_number]['[img]http://serie.ultimation.nl/images/trakt.gif[/img] rating'] = $trakt_ratings['percentage'] . "% " . $trakt_ratings['votes'] . " stemmen";
             }
         }
 
@@ -381,5 +311,29 @@ class TweakersSerie
     private function episodeBroadcasted($broadcastDate)
     {
         return ((strtotime($broadcastDate) < time()));
+    }
+
+    /**
+     * @return string
+     */
+    public function getTvDbUrl()
+    {
+        return $this->_tvdb->tvdb_url;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIMDbUrl()
+    {
+        return $this->_imdb->imdb_url;
+    }
+
+    /**
+     * @return show
+     */
+    public function getTraktUrl()
+    {
+        return $this->_trakt->url;
     }
 }

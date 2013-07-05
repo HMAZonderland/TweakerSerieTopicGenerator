@@ -48,7 +48,7 @@ if (isset($_GET['tvDbId']) && strlen($_GET['tvDbId']) > 0) {
         echo "<br />";
         echo $tweakers->getActorTable($serie->getActors());
         echo "<br />";
-        echo $tweakers->getLinksTable($serie->getTvDbUrl(), $serie->getIMDbUrl());
+        echo $tweakers->getLinksTable($serie->getTvDbUrl(), $serie->getIMDbUrl(), $serie->getTraktUrl());
         echo "<br />";
         echo $tweakers->getEpisodesIndex($serie->getEpisodesData());
 

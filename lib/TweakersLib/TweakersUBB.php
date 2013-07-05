@@ -302,11 +302,12 @@ class TweakersUBB
      *
      * @return string
      */
-    public function getLinksTable($tvdbUrl, $imdbUrl)
+    public function getLinksTable($tvdbUrl, $imdbUrl, $traktUrl)
     {
         $str = $this->getThRow(array(self::createDataArray($this->addAnchor("Links"), array("colspan" => 2))));
         $str .= $this->getTdRow(array(self::createDataArray("IMDb"), self::createDataArray($imdbUrl)));
         $str .= $this->getTdRow(array(self::createDataArray("TvDb"), self::createDataArray($tvdbUrl)));
+        $str .= $this->getTdRow(array(self::createDataArray("trakt"), self::createDataArray($traktUrl)));
         $str .= $this->addBackToSummeryLink();
         return $this->getTable($str);
     }
@@ -333,12 +334,12 @@ class TweakersUBB
                         array_push($header, $head);
                     }
 
-                    if ($var == 'Is uitgezonden?') {
+                    if ($var == 'Uitgezonden?') {
                         array_push($row, self::createDataArray("[img]" . $data . "[/img]", array("width" => 1, "valign" => "top")));
-                    } elseif ($var == 'Seizoen' && $doRowspan) {
+                    } elseif ($var == 'S' && $doRowspan) {
                         $doRowspan = false;
                         array_push($row, self::createDataArray($this->addAnchor($data), array("rowspan" => sizeof($season), "valign" => "top", "width" => 1)));
-                    } elseif ($var != 'Seizoen') {
+                    } elseif ($var != 'S') {
                         array_push($row, self::createDataArray($data, array("valign" => "top")));
                     }
                 }
@@ -364,7 +365,7 @@ class TweakersUBB
         //print_r($str);
         //echo "</pre>";
         //die();
-        $str .= $this->addBackToSummeryLink(5);
+        $str .= $this->addBackToSummeryLink(6);
         return $this->getTable($str);
     }
 }

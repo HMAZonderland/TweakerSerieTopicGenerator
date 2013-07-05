@@ -40,7 +40,7 @@ class ArrayToString
     /**
      * Used to create a string where its values are seperated by [br]
      *
-     * @param SimpleXMLElement $data
+     * @param $data
      *
      * @return SimpleXMLElement[]|string
      */

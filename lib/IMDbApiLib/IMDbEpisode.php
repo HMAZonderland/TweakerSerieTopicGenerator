@@ -28,12 +28,14 @@ class IMDbEpisode
      */
     public $title;
 
-    public function __construct(SimpleXMLElement $data = null)
+    /**
+     * @param SimpleXMLElement $data
+     */
+    public function __construct(array $data = null)
     {
         if ($data != null) {
-            $this->title = (string)$data->title;
-            $this->season = (int)$data->season;
-            $this->episode = (int)$data->episode;
+            foreach ($data as $field => $value)
+            $this->$field = $value;
         }
     }
 }

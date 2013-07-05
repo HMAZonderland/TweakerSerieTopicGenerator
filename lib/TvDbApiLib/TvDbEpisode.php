@@ -9,32 +9,139 @@
 
 class TVDbEpisode
 {
+    /**
+     * @var int
+     */
     public $id;
+
+    /**
+     * @var string
+     */
     public $combined_episodenumber;
+
+    /**
+     * @var string
+     */
     public $combined_season;
+
+    /**
+     * @var string
+     */
     public $DVD_chapter;
+
+    /**
+     * @var string
+     */
     public $DVD_discid;
+
+    /**
+     * @var string
+     */
     public $DVD_episodenumber;
+
+    /**
+     * @var string
+     */
     public $DVD_season;
+
+    /**
+     * @var array
+     */
     public $directors = array();
+
+    /**
+     * @var string
+     */
     public $episode_name;
+
+    /**
+     * @var string
+     */
     public $episode_number;
+
+    /**
+     * @var string
+     */
     public $first_aired;
+
+    /**
+     * @var array
+     */
     public $guest_stars = array();
+
+    /**
+     * @var string
+     */
     public $IMDB_id;
+
+    /**
+     * @var string
+     */
     public $language;
+
+    /**
+     * @var string
+     */
     public $overview;
+
+    /**
+     * @var string
+     */
     public $production_code;
+
+    /**
+     * @var string
+     */
     public $rating;
+
+    /**
+     * @var string
+     */
     public $rating_count;
+
+    /**
+     * @var string
+     */
     public $season_number;
+
+    /**
+     * @var array
+     */
     public $writers = array();
+
+    /**
+     * @var string
+     */
     public $absolute_number;
+
+    /**
+     * @var string
+     */
     public $airsafter_season;
+
+    /**
+     * @var string
+     */
     public $airsbefore_episode;
+
+    /**
+     * @var string
+     */
     public $airsbefore_season;
+
+    /**
+     * @var string
+     */
     public $lastupdated;
+
+    /**
+     * @var string
+     */
     public $seasonid;
+
+    /**
+     * @var string
+     */
     public $seriesid;
 
     /**
