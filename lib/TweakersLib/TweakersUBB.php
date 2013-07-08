@@ -113,7 +113,14 @@ class TweakersUBB
             $color = $this->thBgColor;
         }
 
-        $str = "[" . $type . " bgcolor=#" . $color . " ";
+        if ($this->tableBgColor != $this->tdBgColor && $type == "td") {
+            $str = "[" . $type . " bgcolor=#" . $color . " ";
+        } else if ($this->tableBgColor != $this->thBgColor && $type == "th") {
+            $str = "[" . $type . " bgcolor=#" . $color . " ";
+        } else {
+            $str = "[" . $type . " ";
+        }
+
         foreach ($cell as $property => $value) {
             if ($property != 'data') {
                 $str .= $property . "=" . $value . " ";

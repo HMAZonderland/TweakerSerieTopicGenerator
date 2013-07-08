@@ -62,7 +62,7 @@ if (isset($_POST['query']) && strlen($_POST['query']) > 0) {
                 </tr>
                 <tr>
                     <td>Selecteer een tabel background color</td>
-                    <td><input name="tableBgColor" class="color" value="000000"></td>
+                    <td><input name="tableBgColor" class="color" value="FFFFFF"></td>
                 </tr>
                 <tr>
                     <td>Selecteer een td background color</td>

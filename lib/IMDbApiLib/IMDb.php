@@ -32,9 +32,11 @@ class IMDb
         $this->_IMDBJSON = json_decode(C_URL::get_url_contents($url), true);
         $show = new IMDbShow($this->_IMDBJSON);
 
-        if (sizeof($this->_IMDBJSON['episodes']) > 0) {
-            foreach ($this->_IMDBJSON['episodes'] as $ep) {
-                $show->episodes[] = new IMDbEpisode($ep);
+        if (isset($this->_IMDBJSON['episodes'])) {
+            if (sizeof($this->_IMDBJSON['episodes']) > 0) {
+                foreach ($this->_IMDBJSON['episodes'] as $ep) {
+                    $show->episodes[] = new IMDbEpisode($ep);
+                }
             }
         }
 
