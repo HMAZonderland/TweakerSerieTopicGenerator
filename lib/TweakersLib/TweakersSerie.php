@@ -27,16 +27,22 @@ class TweakersSerie
     private $_trakt;
 
     /**
+     * @var
+     */
+    private $_bierdopje;
+
+    /**
      * Sets up the object
      *
      * @param TvDbShow $tvdb
      * @param IMDbShow $imdb
      */
-    public function __construct(TvDbShow $tvdb, IMDbShow $imdb, traktShow $trakt)
+    public function __construct(TvDbShow $tvdb, IMDbShow $imdb, traktShow $trakt, bierdopjeShow $bierdopje)
     {
         $this->_tvdb = $tvdb;
         $this->_imdb = $imdb;
         $this->_trakt = $trakt;
+        $this->_bierdopje = $bierdopje;
     }
 
     /**
@@ -51,15 +57,14 @@ class TweakersSerie
         $tvdb = new TVDb();
         $imdb = new IMDb();
         $trakt = new Trakt(TRAKT_API_KEY);
+        $bierdopje = new bierdopje();
 
         $tvdbShow = $tvdb->get_tv_show_by_id($tvdbId);
         $imDbShow = $imdb->getSerieById($tvdbShow->IMDB_id);
         $traktShow = new traktShow($trakt->showSummary($tvdbId, 'extend'));
+        $bierdopjeShow = $bierdopje->getShowByTvDbId($tvdbId);
 
-       // Debug::p($traktShow);
-      //  die();
-
-        return new TweakersSerie($tvdbShow, $imDbShow, $traktShow);
+        return new TweakersSerie($tvdbShow, $imDbShow, $traktShow, $bierdopjeShow);
     }
 
     /**
@@ -128,7 +133,9 @@ class TweakersSerie
         $traktVotes = $this->_trakt->ratings['votes'];
         $traktViewers = $this->_trakt->stats['watchers'];
         $traktPlays = $this->_trakt->stats['plays'];
-        $status = $this->_tvdb->status;
+        $bierdopjeRatings = $this->_bierdopje->score;
+        $bierdopjeFavorites = $this->_bierdopje->favorites;
+        $status = $this->_bierdopje->showstatus;
         $network = $this->_tvdb->network;
         $first_air_date = $this->_tvdb->first_aired;
         $filming_locations = $this->_imdb->filming_locations;
@@ -145,6 +152,7 @@ class TweakersSerie
         if (strlen($tvdbRatings) > 0) $array['[img]http://serie.ultimation.nl/images/tvdb_icon.png[/img] TvDb cijfer'] = $tvdbRatings . " (" . $tvdbVotes . " stemmen)";
         if (strlen($traktRatings) > 0) $array['[img]http://serie.ultimation.nl/images/trakt.gif[/img] Trakt percentage'] = $traktRatings . "% (" . $traktVotes . " stemmen)";
         if (strlen($traktViewers) > 0) $array['[img]http://serie.ultimation.nl/images/trakt.gif[/img] Kijkers op trakt'] = $traktViewers . " die gezamelijk " . $traktPlays . "x gekeken hebben";
+        if (strlen($bierdopjeRatings) > 0) $aray['[img]http://serie.ultimation.nl/images/Bierdopje.eu.gif[/img] Bierdopje cijfer'] = $bierdopjeRatings . " (" . $bierdopjeFavorites . " gebruikers in favorieten staan)";
         if (strlen($status) > 0) $array['Status'] = $status;
         if (strlen($filming_locations) > 0) $array['Film locaties'] = $filming_locations;
         if (strlen($runtime) > 0) $array['Speeltijd'] = $runtime;
@@ -245,25 +253,32 @@ class TweakersSerie
 
         // reverse the trakt array
         $trakt_data = array_reverse($this->_trakt->seasons);
-       // Debug::p($trakt_data);
 
-        //Debug::p($this->_tvdb->episodes);
-        //Debug::p($this->_trakt->seasons);
+        $bierdopje_show_index = 0;
 
         // I know the TvDb offers more detailed information about the episode than IMDb does, so we go for that array.
         foreach ($this->_tvdb->episodes as $episode) {
             // No need for the specials
             if ($episode->season_number > 0) {
 
+                // bierdopje ep;
+                $bierdopjeEpisode = $this->_bierdopje->shows[$bierdopje_show_index];
+                if ($bierdopjeEpisode->subsnl == 'true') {
+                    $nlsub = 'http://serie.ultimation.nl/images/nl.gif';
+                } else {
+                    $nlsub = 'http://serie.ultimation.nl/images/nl_gray.gif.png';
+                }
+
+                if ($bierdopjeEpisode->subsen == 'true') {
+                    $ensub = 'http://serie.ultimation.nl/images/us.gif';
+                } else {
+                    $ensub = 'http://serie.ultimation.nl/images/us_gray.gif.png';
+                }
+
                 // extract the trakt data
                 $trakt_ep = $episode->episode_number - 1;
                 $trakt_se = $episode->season_number - 1;
                 $trakt_ratings = $trakt_data[$trakt_se]['episodes'][$trakt_ep]['ratings'];
-
-                //Debug::s('trakt: ' . $trakt_se . ' ' . $trakt_ep);
-                //Debug::s('tvdb: ' . $episode->season_number . ' ' . $episode->episode_number);
-
-                //Debug::p($trakt_ratings);
 
                 $episodes[$episode->season_number][$episode->episode_number]['S'] = $episode->season_number;
                 $episodes[$episode->season_number][$episode->episode_number]['EP'] = $episode->episode_number;
@@ -272,16 +287,14 @@ class TweakersSerie
                     $episodes[$episode->season_number][$episode->episode_number]['Naam'] = $episode->episode_name . "[img link=0 align=right title=\"" . $episode->overview . "\"]http://icon.ultimation.nl/information.png[/img]";
                 }
                 $episodes[$episode->season_number][$episode->episode_number]['Datum'] = $episode->first_aired;
-                $episodes[$episode->season_number][$episode->episode_number]['Tv?'] = "[img link=0 ]" . $this->isBroadcastedIcon($episode->first_aired) . "[/img]";
-                $episodes[$episode->season_number][$episode->episode_number]['[img]http://serie.ultimation.nl/images/trakt.gif[/img] rating'] = $trakt_ratings['percentage'] . "% " . $trakt_ratings['votes'] . " stemmen";
+                $episodes[$episode->season_number][$episode->episode_number]['Tv?'] = "[img link=0]" . $this->isBroadcastedIcon($episode->first_aired) . "[/img]";
+                $episodes[$episode->season_number][$episode->episode_number]['[img]http://serie.ultimation.nl/images/trakt.gif[/img] rating'] = $trakt_ratings['percentage'] . "% (" . $trakt_ratings['votes'] . " stemmen)";
+                $episodes[$episode->season_number][$episode->episode_number]['[img]http://serie.ultimation.nl/images/Bierdopje.eu.gif[/img] rating'] = $bierdopjeEpisode->score . " (" . $bierdopjeEpisode->votes . " stemmen)";
+                $episodes[$episode->season_number][$episode->episode_number]['Subs'] = '[url=' . $bierdopjeEpisode->episodelink . '][img link=0]' . $nlsub . '[/img][/url] [url=' . $bierdopjeEpisode->episodelink . '][img link=0]' . $ensub . '[/img][/url]';
+
+                $bierdopje_show_index++;
             }
         }
-
-        //echo "<pre>";
-        //print_r($this->_tvdb->episodes);
-        //print_r($episodes);
-        //echo "</pre>";
-        //die();
 
         return $episodes;
     }
@@ -335,5 +348,13 @@ class TweakersSerie
     public function getTraktUrl()
     {
         return $this->_trakt->url;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBierdopjeUrl()
+    {
+        return $this->_bierdopje->showlink;
     }
 }

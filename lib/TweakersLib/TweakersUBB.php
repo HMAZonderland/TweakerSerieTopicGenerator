@@ -309,12 +309,13 @@ class TweakersUBB
      *
      * @return string
      */
-    public function getLinksTable($tvdbUrl, $imdbUrl, $traktUrl)
+    public function getLinksTable($tvdbUrl, $imdbUrl, $traktUrl, $bierdopjeUrl)
     {
         $str = $this->getThRow(array(self::createDataArray($this->addAnchor("Links"), array("colspan" => 2))));
         $str .= $this->getTdRow(array(self::createDataArray("IMDb"), self::createDataArray($imdbUrl)));
         $str .= $this->getTdRow(array(self::createDataArray("TvDb"), self::createDataArray($tvdbUrl)));
         $str .= $this->getTdRow(array(self::createDataArray("trakt"), self::createDataArray($traktUrl)));
+        $str .= $this->getTdRow(array(self::createDataArray("Bierdopje"), self::createDataArray($bierdopjeUrl)));
         $str .= $this->addBackToSummeryLink();
         return $this->getTable($str);
     }
@@ -372,7 +373,7 @@ class TweakersUBB
         //print_r($str);
         //echo "</pre>";
         //die();
-        $str .= $this->addBackToSummeryLink(6);
+        $str .= $this->addBackToSummeryLink(8);
         return $this->getTable($str);
     }
 }
